@@ -21,7 +21,7 @@
             android:id="@+id/bunker_name"
             android:layout_weight="1"
             android:textColor="#000000"
-            android:textSize="5dp"
+            android:textSize="40dp"
             android:padding="5dp"
             android:gravity="center"/> // 벙커 이름
         <TextView
@@ -30,7 +30,7 @@
             android:id="@+id/bunker_location"
             android:layout_weight="1"
             android:textColor="#000000"
-            android:textSize="5dp"
+            android:textSize="40dp"
             android:padding="5dp"
             android:gravity="center"/> // 벙커 장소
         

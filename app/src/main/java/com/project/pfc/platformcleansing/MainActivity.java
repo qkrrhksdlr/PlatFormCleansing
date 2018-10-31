@@ -3,6 +3,9 @@ package com.project.pfc.platformcleansing;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -38,5 +41,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, R.string.msg, Toast.LENGTH_SHORT).show(); // 테스트용 토스트
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {   //액션바 추가
+        MenuInflater inflater = getMenuInflater();    //메뉴 인플레이터 정보 얻기
+        inflater.inflate(R.menu.main_menu, menu);     //커스텀 메뉴 적용
+
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){        //메뉴 아이템 이벤트 처리
+        switch (item.getItemId()){
+            case R.id.action_add:                                                               //추가 버튼 클릭 시 EditActivity 호출
+                Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
+                startActivity(goToEdit);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PlatFormCleansing</string>
+    <string name="msg">Hi, This is the Detail !</string>
 </resources>

@@ -17,7 +17,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".SplashActivity" />
-        <activity android:name=".DetailViewActivity" />
+        <activity android:name=".DetailViewActivity"
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".EditActivity"></activity>
     </application>
 

@@ -1,6 +1,8 @@
 package com.project.pfc.platformcleansing;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ArrayList<BunkerItem> data = new ArrayList<BunkerItem>();
+        ArrayList<BunkerItem> data = new ArrayList<BunkerItem>();    //데이터 저장 배열 생성
         data.add(new BunkerItem(R.drawable.bunker1, "테란벙커", "마사라"));
         data.add(new BunkerItem(R.drawable.bunker2, "바다벙커", "해변"));
         data.add(new BunkerItem(R.drawable.bunker3, "위장벙커", "잔디밭"));
@@ -28,16 +30,20 @@ public class MainActivity extends AppCompatActivity {
         data.add(new BunkerItem(R.drawable.bunker5, "Shelter", "에란겔"));
         data.add(new BunkerItem(R.drawable.bunker6, "지하벙커", "숲"));
 
-        bunkerAdapter = new CustomAdapter(this, R.layout.item, data);
+        bunkerAdapter = new CustomAdapter(this, R.layout.item, data);  //어댑터 생성
 
         ListView bunkerList = findViewById(R.id.bunker_list);  //메인 리스트뷰
         bunkerList.setAdapter(bunkerAdapter);
+        bunkerList.setDivider(new ColorDrawable(Color.BLACK));  //리스트뷰 구분자
+        bunkerList.setDividerHeight(5);
 
         bunkerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), DetailViewActivity.class);
-                startActivity(intent);
+                Intent intentDetail = new Intent(getApplicationContext(), DetailViewActivity.class);
+                String data_name = ((BunkerItem)bunkerAdapter.getItem(position)).name;                   //현재 선택된 벙커 이름
+                intentDetail.putExtra("name", data_name);                                         //벙커이름을 DetailViewActivity로 보냄
+                startActivity(intentDetail);
                 Toast.makeText(MainActivity.this, R.string.msg, Toast.LENGTH_SHORT).show(); // 테스트용 토스트
             }
         });

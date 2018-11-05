@@ -8,37 +8,38 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:scaleType="fitXY"
-        android:src="@drawable/bunker1"/>       <!--벙커 이미지-->
+        android:src="@drawable/bunker1"
+        android:contentDescription="TODO" />       <!--벙커 이미지-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="이름 : "
-                android:textSize="30dp"
-                android:textColor="#000000"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/bunker_name"
-                android:layout_weight="1"
-                android:textColor="#000000"
-                android:textSize="30dp"
-                android:padding="5dp"
                 android:gravity="center"
-                android:text="테란벙커"/>      <!--벙커 이름-->
+                android:padding="@dimen/item_text_padding"
+                android:text="@string/item_name"
+                android:textColor="#000000"
+                android:textSize="@dimen/item_text_size" />
+
+            <TextView
+                android:id="@+id/bunker_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="@dimen/item_text_padding"
+                android:text="@string/item_name_text"
+                android:textColor="#000000"
+                android:textSize="@dimen/item_text_size" />      <!--벙커 이름-->
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,21 +49,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="장소 : "
-                android:textSize="30dp"
-                android:textColor="#000000"
-                android:gravity="center"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/bunker_location"
-                android:layout_weight="1"
-                android:textColor="#000000"
-                android:textSize="30dp"
-                android:padding="5dp"
                 android:gravity="center"
-                android:text="마사라"/>        <!--벙커 장소-->
+                android:padding="@dimen/item_text_padding"
+                android:text="@string/item_location"
+                android:textColor="#000000"
+                android:textSize="@dimen/item_text_size" />
+
+            <TextView
+                android:id="@+id/bunker_location"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="@dimen/item_text_padding"
+                android:text="@string/item_location_text"
+                android:textColor="#000000"
+                android:textSize="@dimen/item_text_size" />        <!--벙커 장소-->
         </LinearLayout>
 
     </LinearLayout>

@@ -23,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ArrayList<BunkerItem> data = new ArrayList<BunkerItem>();    //데이터 저장 배열 생성
-        data.add(new BunkerItem(R.drawable.bunker1, "테란벙커", "마사라"));
-        data.add(new BunkerItem(R.drawable.bunker2, "바다벙커", "해변"));
-        data.add(new BunkerItem(R.drawable.bunker3, "위장벙커", "잔디밭"));
-        data.add(new BunkerItem(R.drawable.bunker4, "민간벙커", "슈퍼앞"));
-        data.add(new BunkerItem(R.drawable.bunker5, "Shelter", "에란겔"));
-        data.add(new BunkerItem(R.drawable.bunker6, "지하벙커", "숲"));
+        data.add(new BunkerItem(R.drawable.bunker1, "테란벙커", "0101312312", 6));
+        data.add(new BunkerItem(R.drawable.bunker2, "바다벙커", "01014143431",3));
+        data.add(new BunkerItem(R.drawable.bunker3, "위장벙커", "01014134134",6));
+        data.add(new BunkerItem(R.drawable.bunker4, "민간벙커", "031010410",5));
+        data.add(new BunkerItem(R.drawable.bunker5, "Shelter", "02114134", 8));
+        data.add(new BunkerItem(R.drawable.bunker6, "지하벙커", "02124142", 9));
 
         bunkerAdapter = new CustomAdapter(this, R.layout.item, data);  //어댑터 생성
 

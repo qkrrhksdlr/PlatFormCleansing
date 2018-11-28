@@ -6,10 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,7 @@ public class CustomAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(res, parent, false);
@@ -49,25 +47,11 @@ public class CustomAdapter extends BaseAdapter {
         ImageView img = (ImageView) convertView.findViewById(R.id.bunker_image);
         img.setImageResource(data.get(position).img);
 
-        TextView name = (TextView) convertView.findViewById(R.id.text_name);
+        TextView name = (TextView) convertView.findViewById(R.id.bunker_name);
         name.setText(data.get(position).name);
 
-        TextView call= (TextView) convertView.findViewById(R.id.text_call);
-        call.setText(data.get(position).call);
-
-        TextView num = (TextView) convertView.findViewById(R.id.text_num);
-        num.setText(data.get(position).num + "명");
-
-        ImageButton favorite = (ImageButton) convertView.findViewById(R.id.btn_favorite);
-        favorite.setFocusable(false);
-        final String favoriteMsg = "즐겨찾기에 추가되었습니다.";
-
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, favoriteMsg, Toast.LENGTH_SHORT).show();
-            }
-        });
+        TextView location = (TextView) convertView.findViewById(R.id.bunker_location);
+        location.setText(data.get(position).location);
 
         return convertView;
     }
@@ -76,13 +60,11 @@ public class CustomAdapter extends BaseAdapter {
 class BunkerItem{                   //메인 리스트에 보여줄 항목
     int img;                        //이미지
     String name;                    //이름
-    String call;                //장소
-    int num;
+    String location;                //장소
 
-    BunkerItem(int img, String name, String call, int num){
+    BunkerItem(int img, String name, String location){
         this.img = img;
         this.name = name;
-        this.call = call;
-        this.num = num;
+        this.location = location;
     }
 }

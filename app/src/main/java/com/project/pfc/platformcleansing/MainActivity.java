@@ -1,5 +1,6 @@
 package com.project.pfc.platformcleansing;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -13,24 +14,36 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    static CustomAdapter bunkerAdapter;
+    private BunkerAdapter bunkerAdapter;
+    private BunkerDBHelper bunkerDBHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bunkerDBHelper = new BunkerDBHelper(this);     // sqlite DB 생성
 
-        ArrayList<BunkerItem> data = new ArrayList<BunkerItem>();    //데이터 저장 배열 생성
-        data.add(new BunkerItem(R.drawable.bunker1, "테란벙커", "0101312312", 6));
-        data.add(new BunkerItem(R.drawable.bunker2, "바다벙커", "01014143431",3));
-        data.add(new BunkerItem(R.drawable.bunker3, "위장벙커", "01014134134",6));
-        data.add(new BunkerItem(R.drawable.bunker4, "민간벙커", "031010410",5));
-        data.add(new BunkerItem(R.drawable.bunker5, "Shelter", "02114134", 8));
-        data.add(new BunkerItem(R.drawable.bunker6, "지하벙커", "02124142", 9));
+        File database = getApplicationContext().getDatabasePath(BunkerContract.DB_NAME);
+        if(false == database.exists()){
+            bunkerDBHelper.getReadableDatabase();
 
-        bunkerAdapter = new CustomAdapter(this, R.layout.item, data);  //어댑터 생성
+            if(copyDatabase(this)){
+                Toast.makeText(this, "데이터를 불러오는데 성공했습니다." ,Toast.LENGTH_SHORT).show();
+            } else{
+                Toast.makeText(this, "데이터를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        ArrayList<BunkerItem> data = bunkerDBHelper.getListItemForDB();    //DB에서 리스트뷰 관련 아이템만 받아옴
+
+        bunkerAdapter = new BunkerAdapter(this, R.layout.item, data);  //어댑터 생성
 
         ListView bunkerList = findViewById(R.id.bunker_list);  //메인 리스트뷰
         bunkerList.setAdapter(bunkerAdapter);
@@ -47,6 +60,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, R.string.msg, Toast.LENGTH_SHORT).show(); // 테스트용 토스트
             }
         });
+    }
+
+    private boolean copyDatabase(Context context){
+        try{
+            InputStream inputStream = context.getAssets().open(BunkerContract.DB_NAME);
+            String outFileName = bunkerDBHelper.DBLOCATION + BunkerContract.DB_NAME;
+            OutputStream outputStream = new FileOutputStream(outFileName);
+            byte [] buff = new byte[1024];
+            int length = 0;
+            while((length = inputStream.read(buff)) >0){
+                outputStream.write(buff, 0, length);
+            }
+            outputStream.flush();
+            outputStream.close();
+
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

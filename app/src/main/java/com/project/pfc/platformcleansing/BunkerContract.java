@@ -27,7 +27,8 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String KEY_FAVORITE = "Favorite";
         public static final String KEY_USER = "User";
         public static final String KEY_IMAGE = "Image";
-
+        
+        /*
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + _ID + INT_TYPE  + " PRIMARY KEY" + COMMA +
                 KEY_NAME + TEXT_TYPE + COMMA + KEY_CALL + TEXT_TYPE + COMMA +
                 KEY_LATITUDE + REAL_TYPE + COMMA + KEY_LONGITUDE + REAL_TYPE + COMMA +
@@ -36,6 +37,7 @@ public final class BunkerContract {                    //대피소 관련정보,
                 KEY_REMARKS + TEXT_TYPE + COMMA + KEY_FAVORITE + INT_TYPE + " DEFAULT 0" + COMMA +
                 KEY_USER + TEXT_TYPE + COMMA + KEY_IMAGE + INT_TYPE + " DEFAULT -1" +
                 ")";
+        */
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

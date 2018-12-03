@@ -20,17 +20,17 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //db.execSQL(BunkerContract.Bunkers.CREATE_TABLE);
+        db.execSQL(BunkerContract.Bunkers.CREATE_TABLE);
         db.execSQL(BunkerContract.Users.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        //db.execSQL(BunkerContract.Bunkers.DELETE_TABLE);
+        db.execSQL(BunkerContract.Bunkers.DELETE_TABLE);
         db.execSQL(BunkerContract.Users.DELETE_TABLE);
         onCreate(db);
     }
-
+    /*
     public void openDatabase(){
         String dbPath = context.getDatabasePath(BunkerContract.DB_NAME).getPath();
         if(database != null && database.isOpen()){
@@ -45,6 +45,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
             database.close();
         }
     }
+    */
 
     /*
     * 벙커 데이터베이스 관리
@@ -107,7 +108,6 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
         ArrayList<BunkerItem> listData = new ArrayList<BunkerItem>();
 
-        cursor.moveToFirst();
         while(cursor.moveToNext()){
             String name = cursor.getString(0);
             String call = cursor.getString(1);
@@ -128,6 +128,10 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
                 BunkerContract.Bunkers.KEY_NAME, name
         );
         return getReadableDatabase().rawQuery(sql, null);
+    }
+
+    public void WriteDBtoString(String sql) throws SQLException{
+        getWritableDatabase().execSQL(sql);
     }
 
 

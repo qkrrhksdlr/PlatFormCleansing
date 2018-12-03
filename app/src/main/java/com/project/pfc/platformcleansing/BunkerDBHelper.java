@@ -20,7 +20,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(BunkerContract.Bunkers.CREATE_TABLE);
+        //db.execSQL(BunkerContract.Bunkers.CREATE_TABLE);
         db.execSQL(BunkerContract.Users.CREATE_TABLE);
     }
 

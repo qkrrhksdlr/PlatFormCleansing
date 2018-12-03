@@ -41,28 +41,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        ArrayList<BunkerItem> data = bunkerDBHelper.getListItemForDB();    //DB에서 리스트뷰 관련 아이템만 받아옴
+        viewAllList();
 
-        bunkerAdapter = new BunkerAdapter(this, R.layout.item, data);  //어댑터 생성
-
-        ListView bunkerList = findViewById(R.id.bunker_list);  //메인 리스트뷰
-        bunkerList.setAdapter(bunkerAdapter);
-        bunkerList.setDivider(new ColorDrawable(Color.BLACK));  //리스트뷰 구분자
-        bunkerList.setDividerHeight(5);
-
-        bunkerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intentDetail = new Intent(getApplicationContext(), DetailViewActivity.class);
-                String data_name = ((BunkerItem)bunkerAdapter.getItem(position)).name;                   //현재 선택된 벙커 이름
-                intentDetail.putExtra("name", data_name);                                         //벙커이름을 DetailViewActivity로 보냄
-                startActivity(intentDetail);
-                Toast.makeText(MainActivity.this, R.string.msg, Toast.LENGTH_SHORT).show(); // 테스트용 토스트
-            }
-        });
     }
 
-    private boolean copyDatabase(Context context){
+    private boolean copyDatabase(Context context){                                      // assets 폴더에 미리 넣어놓은 데이터 베이스 복사
         try{
             InputStream inputStream = context.getAssets().open(BunkerContract.DB_NAME);
             String outFileName = bunkerDBHelper.DBLOCATION + BunkerContract.DB_NAME;
@@ -80,6 +63,28 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private void viewAllList(){
+        ArrayList<BunkerItem> data = bunkerDBHelper.getListItemForDB();    //DB에서 리스트뷰 관련 아이템만 받아옴
+
+        bunkerAdapter = new BunkerAdapter(this, data, bunkerDBHelper);  //어댑터 생성
+
+        ListView bunkerList = findViewById(R.id.bunker_list);  //메인 리스트뷰
+        bunkerList.setAdapter(bunkerAdapter);
+        bunkerList.setDivider(new ColorDrawable(Color.BLACK));  //리스트뷰 구분자
+        bunkerList.setDividerHeight(5);
+
+        bunkerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intentDetail = new Intent(getApplicationContext(), DetailViewActivity.class);
+                String data_name = ((BunkerItem)bunkerAdapter.getItem(position)).name;                   //현재 선택된 벙커 이름
+                intentDetail.putExtra("name", data_name);                                         //벙커이름을 DetailViewActivity로 보냄
+                startActivity(intentDetail);
+                Toast.makeText(MainActivity.this, R.string.msg, Toast.LENGTH_SHORT).show(); // 테스트용 토스트
+            }
+        });
     }
 
     @Override

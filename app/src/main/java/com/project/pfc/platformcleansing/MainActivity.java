@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -43,22 +46,15 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
-
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            getSupportFragmentManager().beginTransaction().replace(R.id.select, new SelectFragment()).commit();
-        } else{
-            Intent intent = getIntent();
-            MainFragment mainFragment = new MainFragment();
-            if(intent == null) {
-                mainFragment.setSelection("전체");
-            } else {
-                mainFragment.setSelection(intent.getStringExtra("selectLocation"));
-            }
+        if(getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE){
+            finish();
         }
 
-
+        MainFragment mainFragment = new MainFragment();
+        mainFragment.setIndex(getIntent().getIntExtra("index", -1));
+        getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, mainFragment).commit();
     }
-
 
     private boolean copyDatabase(Context context){                                      // assets 폴더에 미리 넣어놓은 데이터 베이스 복사
         try{
@@ -94,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item){        //메뉴 아이템 이벤트 처리
         switch (item.getItemId()){
-            case android.R.id.home :
-                Intent intent = new Intent(this ,ListActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.action_add:                                                               //추가 버튼 클릭 시 EditActivity 호출
                 Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
                 startActivity(goToEdit);

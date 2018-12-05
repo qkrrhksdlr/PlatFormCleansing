@@ -5,17 +5,24 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements SelectFragment.OnTitleSelectedListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-
-        if(getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE){
-            finish();
-        }
     }
 
+    @Override
+    public void onTitleSelected(int i) {
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            MainFragment mainFragment = new MainFragment();
+            mainFragment.setIndex(i);
+            getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, mainFragment).commit();
+        } else {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("index", i);
+            startActivity(intent);
+        }
+    }
 }

@@ -96,30 +96,34 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<BunkerItem> getListItemForDB(String string){   // 리스트뷰에 뿌려줄 아이템들만 모아서 받아오기
         String sql;
-        if(string.equals("전체")) {
-            sql = String.format(
-                    "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
-                    BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                    BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
-                    BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
-                    BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME
-            );
-        } else if (string.equals("즐겨찾기")){
-            sql = String.format(
-                    "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
-                    BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                    BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
-                    BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
-                    BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
-                    BunkerContract.Bunkers.KEY_FAVORITE, 1);
-        } else {
-            sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%'",
-                    BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                    BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
-                    BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
-                    BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
-                    BunkerContract.Bunkers.KEY_ADDRESS_1, string
-                    );
+        switch (string) {
+            case "전체":
+                sql = String.format(
+                        "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
+                        BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
+                        BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
+                        BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
+                        BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME
+                );
+                break;
+            case "즐겨찾기":
+                sql = String.format(
+                        "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
+                        BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
+                        BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
+                        BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
+                        BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
+                        BunkerContract.Bunkers.KEY_FAVORITE, 1);
+                break;
+            default:
+                sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%'",
+                        BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
+                        BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
+                        BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
+                        BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
+                        BunkerContract.Bunkers.KEY_ADDRESS_1, string
+                );
+                break;
         }
 
 

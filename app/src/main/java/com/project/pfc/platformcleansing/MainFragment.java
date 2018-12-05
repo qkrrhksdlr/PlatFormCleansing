@@ -20,14 +20,15 @@ public class MainFragment extends Fragment {
     private BunkerAdapter bunkerAdapter;
     private BunkerDBHelper bunkerDBHelper;
     private View rootView;
-    static String name = "전체";
+
+    static int index = -1;
 
     public MainFragment() {
         // Required empty public constructor
     }
-
-    public void setSelection(String name){ this.name = name; }
-
+    public void setIndex(int i) {
+        index = i;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,10 +36,17 @@ public class MainFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         bunkerDBHelper = new BunkerDBHelper(getActivity());
 
-        viewAllList();
         return rootView;
     }
-    private void viewAllList(){
+
+    public void onResume(){
+        super.onResume();
+        if(index>=0){
+            viewAllList(SelectFragment.list[index]);
+        }
+    }
+
+    private void viewAllList(String name){
         ArrayList<BunkerItem> data = bunkerDBHelper.getListItemForDB(name);    //DB에서 리스트뷰 관련 아이템만 받아옴
 
         bunkerAdapter = new BunkerAdapter(getActivity(), data, bunkerDBHelper);  //어댑터 생성

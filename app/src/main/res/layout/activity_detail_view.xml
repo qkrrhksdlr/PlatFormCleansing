@@ -8,86 +8,120 @@
     <!--지도담을 공간-->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/map"/>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
+                android:orientation="horizontal">
 
                 <TableLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="110dp"
-                    android:layout_weight="3">
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:stretchColumns="1">
 
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="이름"
-                            android:layout_weight="1"/>
+                            android:padding="@dimen/detail_text_padding"
+                            android:text="@string/detail_name"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
                         <TextView
                             android:id="@+id/detail_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"/>
+                            android:padding="@dimen/detail_text_padding"/>
                     </TableRow>
 
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="전화번호"
-                            android:layout_weight="1"/>
+                            android:padding="@dimen/detail_text_padding"
+                            android:text="@string/detail_call"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
                         <TextView
                             android:id="@+id/detail_call"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"/>
+                            android:padding="@dimen/detail_text_padding"/>
                     </TableRow>
 
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="수용인원"
-                            android:layout_weight="1"/>
+                            android:padding="@dimen/detail_text_padding"
+                            android:text="@string/detail_capacity"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
                         <TextView
-                            android:id="@+id/detail_num"
+                            android:id="@+id/detail_capacity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"/>
+                            android:padding="@dimen/detail_text_padding"/>
                     </TableRow>
 
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="주소"
-                            android:layout_weight="1"/>
+                            android:padding="@dimen/detail_text_padding"
+                            android:text="@string/detail_address1"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
                         <TextView
-                            android:id="@+id/detail_location"
+                            android:id="@+id/detail_address1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/detail_text_padding"
+                            android:layout_weight="1"
+                            android:ellipsize="none"
+                            android:scrollHorizontally="false"
+                            android:maxLines="2"
+                            android:singleLine="false"/>
+                    </TableRow>
+                    <TableRow>
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2"/>
+                            android:text="@string/detail_address2"
+                            android:padding="@dimen/detail_text_padding"
+                            android:textStyle="bold"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/detail_address2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="none"
+                            android:maxLines="2"
+                            android:padding="@dimen/detail_text_padding"
+                            android:scrollHorizontally="false"
+                            android:singleLine="false" />
                     </TableRow>
                 </TableLayout>
 
                 <ImageView
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
+                    android:layout_width="@dimen/detail_image_size"
+                    android:layout_height="@dimen/detail_image_size"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/bunker1"
                     android:layout_weight="1"/>
@@ -95,23 +129,48 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비고"/>
+                android:padding="@dimen/detail_text_padding"
+                android:text="@string/detail_remarks"
+                android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/detail_text_padding"
+                android:id="@+id/detail_remarks"
                 android:text="치즈케익 맛있당" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="작성자"/>
-
+                android:layout_marginTop="@dimen/detail_text_padding">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/detail_text_padding"
+                    android:text="@string/detail_user"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/detail_user"
+                    android:padding="@dimen/detail_text_padding"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detail_date"
+                    android:padding="@dimen/detail_text_padding"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/detail_date"
+                    android:padding="@dimen/detail_text_padding"/>
+            </LinearLayout>
         </LinearLayout>
-
     </ScrollView>
-
-
 </LinearLayout>

@@ -120,13 +120,15 @@ class BunkerItem{                   //메인 리스트에 보여줄 항목
     public String address2;     //지번주소
     public int capacity;        //수용인원
     public int favorite;    //즐겨찾기여부
+    public int _id;
 
-    public BunkerItem(String name, String call, String address1, String address2, int capacity, int favorite) {
+    public BunkerItem(String name, String call, String address1, String address2, int capacity, int favorite, int _id) {
         this.name = name;
         this.call = call;
         this.address1 = address1;
         this.address2 = address2;
         this.capacity = capacity;
         this.favorite = favorite;
+        this._id = _id;
     }
 }

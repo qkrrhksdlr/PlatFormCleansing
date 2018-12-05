@@ -99,11 +99,11 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
 
     public ArrayList<BunkerItem> getListItemForDB(){   // 리스트뷰에 뿌려줄 아이템들만 모아서 받아오기
         String sql = String.format(
-                "SELECT %s, %s, %s, %s, %s, %s FROM %s",
+                "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
                 BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
                 BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
                 BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
-                BunkerContract.Bunkers.TABLE_NAME
+                BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME
         );
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
         ArrayList<BunkerItem> listData = new ArrayList<BunkerItem>();
@@ -115,19 +115,26 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
             String address2 = cursor.getString(3);
             int capacity = cursor.getInt(4);
             int favorite = cursor.getInt(5);
+            int _id = cursor.getInt(6);
 
-            listData.add(new BunkerItem(name, call, address1, address2, capacity, favorite));
+            listData.add(new BunkerItem(name, call, address1, address2, capacity, favorite, _id));
         }
 
         return listData;
     }
 
-    public Cursor getDetailData(String name){         // 디테일뷰에 보여줄 한 튜플 받아오기
-        String sql = String.format(
-                "SELECT * FROM %s WHERE %s = '%s'", BunkerContract.Bunkers.TABLE_NAME,
-                BunkerContract.Bunkers.KEY_NAME, name
-        );
-        return getReadableDatabase().rawQuery(sql, null);
+    public Cursor getDetailData(int _id){         // 디테일뷰에 보여줄 한 튜플 받아오기
+        Cursor cursor;
+        if(_id == -1){
+            cursor = null;
+        } else {
+            String sql = String.format(
+                    "SELECT * FROM %s WHERE %s = %d", BunkerContract.Bunkers.TABLE_NAME,
+                    BunkerContract.Bunkers._ID, _id
+            );
+            cursor = getReadableDatabase().rawQuery(sql, null);
+        }
+        return cursor;
     }
 
     public void WriteDBtoString(String sql) throws SQLException{

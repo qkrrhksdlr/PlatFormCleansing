@@ -52,4 +52,19 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
+    public static class CursorIndex{
+        public static final int _ID = 0;
+        public static final int NAME = 1;
+        public static final int CALL = 2;
+        public static final int LATITUDE = 3;
+        public static final int LONGITUDE = 4;
+        public static final int RNADDRESS = 5;
+        public static final int ADDRESS = 6;
+        public static final int CAPACITY = 7;
+        public static final int DATE = 8;
+        public static final int REMAKRS = 9;
+        public static final int Favoirte = 10;
+        public static final int User = 11;
+        public static final int Image = 12;
+    }
 }

@@ -79,10 +79,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intentDetail = new Intent(getApplicationContext(), DetailViewActivity.class);
-                String data_name = ((BunkerItem)bunkerAdapter.getItem(position)).name;                   //현재 선택된 벙커 이름
-                intentDetail.putExtra("name", data_name);                                         //벙커이름을 DetailViewActivity로 보냄
+                int _id = ((BunkerItem)bunkerAdapter.getItem(position))._id;                   //현재 선택된 벙커 이름
+                intentDetail.putExtra("id", _id);                                         //벙커이름을 DetailViewActivity로 보냄
                 startActivity(intentDetail);
-                Toast.makeText(MainActivity.this, R.string.msg, Toast.LENGTH_SHORT).show(); // 테스트용 토스트
             }
         });
     }

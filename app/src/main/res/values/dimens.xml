@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="item_text_padding"> 2dp </dimen>
-    <dimen name="item_text_size">30sp</dimen>
+    <dimen name="detail_text_padding">5dp</dimen>
+    <dimen name="detail_text_size">15sp</dimen>
+    <dimen name="detail_image_size">150dp</dimen>
 </resources>

@@ -9,4 +9,7 @@
     <string name="detail_remarks">비고</string>
     <string name="detail_user">작성자</string>
     <string name="detail_date">수정날짜</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

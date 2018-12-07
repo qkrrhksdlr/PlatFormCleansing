@@ -11,9 +11,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DetailViewActivity extends AppCompatActivity {
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+
+public class DetailViewActivity extends AppCompatActivity implements OnMapReadyCallback {
     private BunkerDBHelper bunkerDBHelper;
     private Cursor cursor;
+    private GoogleMap map;
 
     private int setting;
     @Override
@@ -23,6 +28,9 @@ public class DetailViewActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         bunkerDBHelper = new BunkerDBHelper(this);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.detail_map);
+        mapFragment.getMapAsync(this);
 
         TextView detail_name = (TextView) findViewById(R.id.detail_name);
         TextView detail_call = (TextView) findViewById(R.id.detail_call);
@@ -115,5 +123,10 @@ public class DetailViewActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
     }
 }

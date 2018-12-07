@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+        actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_sort_alphabetically);
 
         return super.onCreateOptionsMenu(menu);
     }

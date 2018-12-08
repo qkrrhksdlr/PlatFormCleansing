@@ -35,7 +35,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         TextView detail_name = (TextView) findViewById(R.id.detail_name);
         TextView detail_call = (TextView) findViewById(R.id.detail_call);
         TextView detail_capacity = (TextView) findViewById(R.id.detail_capacity);
-        TextView detail_address1 = (TextView) findViewById(R.id.detail_address1);
+        //TextView detail_address1 = (TextView) findViewById(R.id.detail_address1);
         TextView detail_address2 = (TextView) findViewById(R.id.detail_address2);
         TextView detail_remarks = (TextView) findViewById(R.id.detail_remarks);
         TextView detail_user = (TextView) findViewById(R.id.detail_user);
@@ -52,7 +52,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         detail_name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
         detail_call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
         detail_capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));
-        detail_address1.setText(cursor.getString(BunkerContract.CursorIndex.RNADDRESS));
+        //detail_address1.setText(cursor.getString(BunkerContract.CursorIndex.RNADDRESS));
         detail_address2.setText(cursor.getString(BunkerContract.CursorIndex.ADDRESS));
         detail_remarks.setText(cursor.getString(BunkerContract.CursorIndex.REMAKRS));
         detail_user.setText(cursor.getString(BunkerContract.CursorIndex.User));

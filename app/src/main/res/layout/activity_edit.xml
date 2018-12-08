@@ -138,12 +138,14 @@
                     </TableRow>
                 </TableLayout>
 
-                <ImageView
+                <ImageButton
                     android:layout_width="@dimen/detail_image_size"
                     android:layout_height="@dimen/detail_image_size"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/bunker1"
-                    android:layout_weight="1"/>
+                    android:scaleType="fitCenter"
+                    android:layout_weight="1"
+                    android:id="@+id/edit_image"/>
 
             </LinearLayout>
 

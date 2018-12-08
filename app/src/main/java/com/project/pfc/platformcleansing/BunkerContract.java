@@ -26,6 +26,7 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String KEY_FAVORITE = "Favorite";
         public static final String KEY_USER = "User";
         public static final String KEY_IMAGE = "Image";
+        //public static final String image_path =
         
         /*
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + _ID + INT_TYPE  + " PRIMARY KEY" + COMMA +

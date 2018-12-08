@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_add:                                                               //추가 버튼 클릭 시 EditActivity 호출
                 Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
-                goToEdit.putExtra("edit", false);
+                goToEdit.putExtra("edit", false);                   //추가 상태를 의미
                 startActivity(goToEdit);
                 return true;
             default:

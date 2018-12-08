@@ -1,8 +1,10 @@
 package com.project.pfc.platformcleansing;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,16 +13,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class DetailViewActivity extends AppCompatActivity implements OnMapReadyCallback {
-    private BunkerDBHelper bunkerDBHelper;
-    private Cursor cursor;
-    private GoogleMap map;
-
-    private int setting;
+    private BunkerDBHelper bunkerDBHelper;     //데이터베이스 활용
+    private Cursor cursor;                      //데이터 받을 커서
+    private GoogleMap map;                      //맵
+    private int setting;                        //즐겨찾기여부
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +33,10 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         Intent intent = getIntent();
         bunkerDBHelper = new BunkerDBHelper(this);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.detail_map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.detail_map);  //지도 연결
         mapFragment.getMapAsync(this);
 
-        TextView detail_name = (TextView) findViewById(R.id.detail_name);
+        TextView detail_name = (TextView) findViewById(R.id.detail_name);                       //뷰 받아오기
         TextView detail_call = (TextView) findViewById(R.id.detail_call);
         TextView detail_capacity = (TextView) findViewById(R.id.detail_capacity);
         TextView detail_address2 = (TextView) findViewById(R.id.detail_address);
@@ -42,12 +46,12 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
 
         cursor = bunkerDBHelper.getDetailData(intent.getIntExtra("id", -1));
 
-        if (cursor == null) {
+        if (cursor == null) {                   //데이터 받아오기 실패 했을 때 메인으로 돌아감
             Toast.makeText(getApplicationContext(), "데이터를 불러오는데에 실패했습니다.\n다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        cursor.moveToNext();
+        cursor.moveToNext();                            //항목에 데이터 입력
         detail_name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
         detail_call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
         detail_capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));
@@ -62,7 +66,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.detail_menu, menu);
-        setting = cursor.getInt(BunkerContract.CursorIndex.Favoirte);
+        setting = cursor.getInt(BunkerContract.CursorIndex.Favoirte);           //즐겨 찾기 여부에 따른 버튼 모양 변경
         MenuItem btn_favorite = menu.findItem(R.id.favorite);
         if(setting == 1){
             btn_favorite.setIcon(android.R.drawable.star_big_on);
@@ -76,7 +80,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.favorite :
+            case R.id.favorite :                    //즐겨찾기 버튼 누를시 등록, 취소 변경
                 try{
                         if(setting == 1)
                             setting = 0;
@@ -105,18 +109,11 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 return true;
             case R.id.delete :
-                try {
-                    bunkerDBHelper.deleteBunkerData(cursor.getInt(BunkerContract.CursorIndex._ID));
-                    Toast.makeText(getApplicationContext(), "삭제하였습니다.", Toast.LENGTH_SHORT).show();
-                    finish();
-                } catch (SQLException e){
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
-                }
+                deleteDialog();  //삭제 확인 안내창 띄움
                 return true;
             case R.id.edit_activity:
-                Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
-                goToEdit.putExtra("edit", true);
+                Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);      //editActivity 로 이동
+                goToEdit.putExtra("edit", true);                                    // 수정상태를 의미
                 goToEdit.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));
                 startActivity(goToEdit);
                 return true;
@@ -125,8 +122,44 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
+    public void deleteDialog(){                     //delete 버튼 클릭시 안내창
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete");
+        builder.setMessage("삭제하시겠습니까?");
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {          //예  눌렀을 시
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                try {
+                    bunkerDBHelper.deleteBunkerData(cursor.getInt(BunkerContract.CursorIndex._ID));
+                    Toast.makeText(getApplicationContext(), "삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
+    }
+
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {           //받아온 위도 경도 값으로 지도 위치 이동
         map = googleMap;
+        cursor.moveToFirst();
+        String name = cursor.getString(BunkerContract.CursorIndex.NAME);
+        double latitude = cursor.getDouble(BunkerContract.CursorIndex.LATITUDE);
+        double longitude = cursor.getDouble(BunkerContract.CursorIndex.LONGITUDE);
+        addMaker(latitude, longitude, name);
+    }
+    public void addMaker(double latitude, double longitude, String name){           //마커 추가
+        LatLng latLng = new LatLng(latitude, longitude);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+        map.addMarker(new MarkerOptions().alpha(0.8f).title(name).position(latLng));
     }
 }

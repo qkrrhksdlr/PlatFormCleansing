@@ -24,11 +24,9 @@
         <activity android:name=".MainActivity"
             android:parentActivityName=".ListActivity"/>
         <activity
-            android:name=".DetailViewActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".DetailViewActivity" />
         <activity
-            android:name=".EditActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".EditActivity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD6jbZoEzal_zNn8cWBcLBTEjOVy8dJnpA"/>

@@ -52,7 +52,7 @@ public class BunkerAdapter extends BaseAdapter {
         TextView name = (TextView) convertView.findViewById(R.id.text_name);
         TextView call = (TextView) convertView.findViewById(R.id.text_call);
         TextView capacity = (TextView) convertView.findViewById(R.id.text_capacity);
-        TextView address1 = (TextView) convertView.findViewById(R.id.text_address1);
+        //TextView address1 = (TextView) convertView.findViewById(R.id.text_address1);
         TextView address2 = (TextView) convertView.findViewById(R.id.text_address2);
         ImageButton favorite = (ImageButton) convertView.findViewById(R.id.btn_favorite);               //listView 아이템
 
@@ -61,7 +61,7 @@ public class BunkerAdapter extends BaseAdapter {
         name.setText(item.name);
         call.setText(item.call);
         capacity.setText(Integer.toString(item.capacity));                 //텍스트 설정
-        address1.setText(item.address1);
+        //address1.setText(item.address1);
         address2.setText(item.address2);
 
         final int star_on = android.R.drawable.star_on;

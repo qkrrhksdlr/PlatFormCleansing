@@ -84,25 +84,25 @@
                             android:padding="@dimen/detail_text_padding"/>
                     </TableRow>
 
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/detail_text_padding"
-                            android:text="@string/detail_address1"
-                            android:textStyle="bold"
-                            android:gravity="center"/>
-                        <TextView
-                            android:id="@+id/detail_address1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/detail_text_padding"
-                            android:layout_weight="1"
-                            android:ellipsize="none"
-                            android:scrollHorizontally="false"
-                            android:maxLines="2"
-                            android:singleLine="false"/>
-                    </TableRow>
+                    <!--<TableRow>-->
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:padding="@dimen/detail_text_padding"-->
+                            <!--android:text="@string/detail_address1"-->
+                            <!--android:textStyle="bold"-->
+                            <!--android:gravity="center"/>-->
+                        <!--<TextView-->
+                            <!--android:id="@+id/detail_address1"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:padding="@dimen/detail_text_padding"-->
+                            <!--android:layout_weight="1"-->
+                            <!--android:ellipsize="none"-->
+                            <!--android:scrollHorizontally="false"-->
+                            <!--android:maxLines="2"-->
+                            <!--android:singleLine="false"/>-->
+                    <!--</TableRow>-->
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"

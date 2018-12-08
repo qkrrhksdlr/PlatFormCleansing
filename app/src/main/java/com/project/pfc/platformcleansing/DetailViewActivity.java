@@ -64,7 +64,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.detail_menu, menu);
-        int setting = cursor.getInt(BunkerContract.CursorIndex.Favoirte);
+        setting = cursor.getInt(BunkerContract.CursorIndex.Favoirte);
         MenuItem btn_favorite = menu.findItem(R.id.favorite);
         if(setting == 1){
             btn_favorite.setIcon(android.R.drawable.star_big_on);
@@ -80,7 +80,6 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         switch (item.getItemId()) {
             case R.id.favorite :
                 try{
-                        setting = cursor.getInt(BunkerContract.CursorIndex.Favoirte);
                         if(setting == 1)
                             setting = 0;
                         else

@@ -19,8 +19,7 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String KEY_CALL = "Call";
         public static final String KEY_LATITUDE = "Latitude";
         public static final String KEY_LONGITUDE = "Longitude";
-        public static final String KEY_ADDRESS_1 = "RNAddress";
-        public static final String KEY_ADDRESS_2 = "Address";
+        public static final String KEY_ADDRESS = "Address";
         public static final String KEY_CAPACITY = "Capacity";
         public static final String KEY_DATE = "Date";
         public static final String KEY_REMARKS = "Remarks";
@@ -32,7 +31,7 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + _ID + INT_TYPE  + " PRIMARY KEY" + COMMA +
                 KEY_NAME + TEXT_TYPE + COMMA + KEY_CALL + TEXT_TYPE + COMMA +
                 KEY_LATITUDE + REAL_TYPE + COMMA + KEY_LONGITUDE + REAL_TYPE + COMMA +
-                KEY_ADDRESS_1 + TEXT_TYPE + COMMA + KEY_ADDRESS_2 + TEXT_TYPE + COMMA +
+                KEY_ADDRESS + TEXT_TYPE + COMMA +
                 KEY_CAPACITY + INT_TYPE + COMMA + KEY_DATE + TEXT_TYPE + COMMA +
                 KEY_REMARKS + TEXT_TYPE + COMMA + KEY_FAVORITE + INT_TYPE + " DEFAULT 0" + COMMA +
                 KEY_USER + TEXT_TYPE + COMMA + KEY_IMAGE + INT_TYPE + " DEFAULT -1" +
@@ -58,13 +57,12 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final int CALL = 2;
         public static final int LATITUDE = 3;
         public static final int LONGITUDE = 4;
-        public static final int RNADDRESS = 5;
-        public static final int ADDRESS = 6;
-        public static final int CAPACITY = 7;
-        public static final int DATE = 8;
-        public static final int REMAKRS = 9;
-        public static final int Favoirte = 10;
-        public static final int User = 11;
-        public static final int Image = 12;
+        public static final int ADDRESS = 5;
+        public static final int CAPACITY = 6;
+        public static final int DATE = 7;
+        public static final int REMAKRS = 8;
+        public static final int Favoirte = 9;
+        public static final int User = 10;
+        public static final int Image = 11;
     }
 }

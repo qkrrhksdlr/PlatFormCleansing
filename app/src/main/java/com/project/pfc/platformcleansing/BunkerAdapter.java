@@ -52,8 +52,7 @@ public class BunkerAdapter extends BaseAdapter {
         TextView name = (TextView) convertView.findViewById(R.id.text_name);
         TextView call = (TextView) convertView.findViewById(R.id.text_call);
         TextView capacity = (TextView) convertView.findViewById(R.id.text_capacity);
-        //TextView address1 = (TextView) convertView.findViewById(R.id.text_address1);
-        TextView address2 = (TextView) convertView.findViewById(R.id.text_address2);
+        TextView address2 = (TextView) convertView.findViewById(R.id.text_address);
         ImageButton favorite = (ImageButton) convertView.findViewById(R.id.btn_favorite);               //listView 아이템
 
         BunkerItem item = (BunkerItem)getItem(position);
@@ -116,16 +115,14 @@ public class BunkerAdapter extends BaseAdapter {
 class BunkerItem{                   //메인 리스트에 보여줄 항목
     public String name;        //대피소명
     public String call;        //전화번호
-    public String address1;     //도로명주소
     public String address2;     //지번주소
     public int capacity;        //수용인원
     public int favorite;    //즐겨찾기여부
     public int _id;
 
-    public BunkerItem(String name, String call, String address1, String address2, int capacity, int favorite, int _id) {
+    public BunkerItem(String name, String call, String address2, int capacity, int favorite, int _id) {
         this.name = name;
         this.call = call;
-        this.address1 = address1;
         this.address2 = address2;
         this.capacity = capacity;
         this.favorite = favorite;

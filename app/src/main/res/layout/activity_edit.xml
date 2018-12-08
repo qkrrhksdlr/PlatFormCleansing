@@ -129,7 +129,7 @@
                             android:gravity="center"/>
 
                         <EditText
-                            android:id="@+id/edit_address2"
+                            android:id="@+id/edit_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="@dimen/detail_text_padding"

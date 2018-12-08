@@ -52,11 +52,11 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     * 벙커 데이터베이스 관리
      */
     public void insertBunkerData (String name, String call, double latitude, double longitude,
-                                  String address1, String address2, int capacity, String reMarks, String user){  // editActivity 에서 받아온 벙커 데이터 삽입
+                                  String address, int capacity, String reMarks, String user){  // editActivity 에서 받아온 벙커 데이터 삽입
         try{
             String sql = String.format(
-                    "INSERT INTO %s VALUES (NULL, '%s', '%s', '%f', '%f', '%s', '%s', '%d', '%s', '%s', '%d', '%s', '%d'",
-                    BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address1, address2, capacity, getDate(), reMarks, 0, user, -1
+                    "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', '%d', '%s', '%s', %d, '%s', %d",
+                    BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address, capacity, getDate(), reMarks, 0, user, -1
             );
 
             getWritableDatabase().execSQL(sql);
@@ -77,13 +77,13 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateBunkerData(String name, String call, double latitude, double longitude,
-                                 String address1, String address2, int capacity, String reMarks){  // 이미있는 내용 수정시 데이터베이스 수정
+                                 String address, int capacity, String reMarks){  // 이미있는 내용 수정시 데이터베이스 수정
         try{
             String sql = String.format(
-                    "UPDATE %s SET %s = '%s', %s = '%s', %s = '%f', %s = '%f', %s = '%f', %s = '%s', %s = '%s', %s = '%d', %s = '%s' WHERE %s = %s",
+                    "UPDATE %s SET %s = '%s', %s = '%s', %s = %f, %s = %f, %s = '%s', %s = %d, %s = '%s', %s = '%s' WHERE %s = %s",
                     BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_NAME, name, BunkerContract.Bunkers.KEY_CALL, call,
                     BunkerContract.Bunkers.KEY_LATITUDE, latitude, BunkerContract.Bunkers.KEY_LONGITUDE, longitude,
-                    BunkerContract.Bunkers.KEY_ADDRESS_1, address1, BunkerContract.Bunkers.KEY_ADDRESS_2, address2,
+                    BunkerContract.Bunkers.KEY_ADDRESS, address,
                     BunkerContract.Bunkers.KEY_CAPACITY, capacity, BunkerContract.Bunkers.KEY_DATE, getDate(),
                     BunkerContract.Bunkers.KEY_REMARKS, reMarks, BunkerContract.Bunkers.KEY_NAME, name
             );
@@ -99,29 +99,29 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         switch (string) {
             case "전체":
                 sql = String.format(
-                        "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
+                        "SELECT %s, %s, %s, %s, %s, %s FROM %s",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                        BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
+                        BunkerContract.Bunkers.KEY_ADDRESS,
                         BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME
                 );
                 break;
             case "즐겨찾기":
                 sql = String.format(
-                        "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
+                        "SELECT %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                        BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
+                        BunkerContract.Bunkers.KEY_ADDRESS,
                         BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
                         BunkerContract.Bunkers.KEY_FAVORITE, 1);
                 break;
             default:
-                sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%'",
+                sql = String.format("SELECT %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%'",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                        BunkerContract.Bunkers.KEY_ADDRESS_1, BunkerContract.Bunkers.KEY_ADDRESS_2,
+                        BunkerContract.Bunkers.KEY_ADDRESS,
                         BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
-                        BunkerContract.Bunkers.KEY_ADDRESS_1, string
+                        BunkerContract.Bunkers.KEY_ADDRESS, string
                 );
                 break;
         }
@@ -134,13 +134,13 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         while(cursor.moveToNext()){
             String name = cursor.getString(0);
             String call = cursor.getString(1);
-            String address1 = cursor.getString(2);
-            String address2 = cursor.getString(3);
-            int capacity = cursor.getInt(4);
-            int favorite = cursor.getInt(5);
-            int _id = cursor.getInt(6);
+            //String address1 = cursor.getString(2);
+            String address = cursor.getString(2);
+            int capacity = cursor.getInt(3);
+            int favorite = cursor.getInt(4);
+            int _id = cursor.getInt(5);
 
-            listData.add(new BunkerItem(name, call, address1, address2, capacity, favorite, _id));
+            listData.add(new BunkerItem(name, call, address, capacity, favorite, _id));
         }
 
         return listData;

@@ -35,8 +35,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         TextView detail_name = (TextView) findViewById(R.id.detail_name);
         TextView detail_call = (TextView) findViewById(R.id.detail_call);
         TextView detail_capacity = (TextView) findViewById(R.id.detail_capacity);
-        //TextView detail_address1 = (TextView) findViewById(R.id.detail_address1);
-        TextView detail_address2 = (TextView) findViewById(R.id.detail_address2);
+        TextView detail_address2 = (TextView) findViewById(R.id.detail_address);
         TextView detail_remarks = (TextView) findViewById(R.id.detail_remarks);
         TextView detail_user = (TextView) findViewById(R.id.detail_user);
         TextView detail_date = (TextView) findViewById(R.id.detail_date);
@@ -52,7 +51,6 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         detail_name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
         detail_call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
         detail_capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));
-        //detail_address1.setText(cursor.getString(BunkerContract.CursorIndex.RNADDRESS));
         detail_address2.setText(cursor.getString(BunkerContract.CursorIndex.ADDRESS));
         detail_remarks.setText(cursor.getString(BunkerContract.CursorIndex.REMAKRS));
         detail_user.setText(cursor.getString(BunkerContract.CursorIndex.User));
@@ -117,7 +115,10 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
                 }
                 return true;
             case R.id.edit_activity:
-                startActivity(new Intent(getApplicationContext(), EditActivity.class));
+                Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
+                goToEdit.putExtra("edit", true);
+                goToEdit.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));
+                startActivity(goToEdit);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

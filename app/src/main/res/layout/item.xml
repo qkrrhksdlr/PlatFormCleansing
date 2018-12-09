@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="5dp">
     <LinearLayout
@@ -17,7 +18,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:id="@+id/text_name"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="30dp" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -30,7 +31,8 @@
                 android:layout_height="wrap_content"
                 android:text="010-3502-7378"
                 android:textSize="20sp"
-                android:id="@+id/text_call"/>
+                android:textStyle="bold"
+                android:id="@+id/text_call" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -44,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:text="수용인원"
                 android:textSize="20sp"
-                android:id="@+id/text_capacity"/>
+                android:textStyle="bold"
+                android:id="@+id/text_capacity" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -57,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="주소"
-                android:id="@+id/text_address"/>
+                android:id="@+id/text_address" />
         </LinearLayout>
 
     </LinearLayout>

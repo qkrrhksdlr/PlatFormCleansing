@@ -75,7 +75,6 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(_id > 0) {
                 cursor = dbHelper.getDetailData(_id);
                 while(cursor.moveToNext()){
-                    setTitle(cursor.getString(BunkerContract.CursorIndex.NAME)); // 타이틀바 대피소 이름
                     name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
                     call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
                     capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));

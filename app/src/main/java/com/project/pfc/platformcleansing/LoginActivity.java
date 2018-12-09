@@ -1,24 +1,29 @@
 package com.project.pfc.platformcleansing;
 
-import android.content.Intent;
+
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 
 import static android.os.Build.ID;
 import static android.provider.Telephony.Carriers.PASSWORD;
 
 public class LoginActivity extends AppCompatActivity {
+
+    public static final String PREFERENCES_ID = "";
+    public static final String PREFERENCES_PWD = "";
+
+    SharedPreferences setting;
+
     private BunkerDBHelper dbHelper;
 
     final TextView loginText = (TextView) findViewById(R.id.LOGIN_text);
@@ -32,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        setting = getSharedPreferences(PREFERENCES_ID, MODE_PRIVATE);
 
 
         dbHelper = new BunkerDBHelper(this);
@@ -48,13 +55,16 @@ public class LoginActivity extends AppCompatActivity {
                 String PASSWORDdata = cursor.getString(1);
 
                 if(editID.equals(IDdata) && editPASS.equals(PASSWORDdata)){
-                    Toast.makeText(getApplicationContext(), "로그인성공춘", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "LOGIN SUCCESSFUL", Toast.LENGTH_LONG).show();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 잘못입력하셨습니다", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        saveID(ID);
+        savePWD(PASSWORD);
 
         btn_Signup.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -72,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                         btn_Signup.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v) {               //다시 버튼 바꾸고 JOIN버튼 비활도 풀어준다
+                                loginText.setText("LOGIN");
                                 btn_Signup.setText("회원가입");
                                 btn_Signin.setEnabled(true);
                             }
@@ -83,6 +94,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        }
+    }
+
+    private void saveID(String text){
+        SharedPreferences.Editor editor = setting.edit();
+        editor.putString(PREFERENCES_ID, text);
+    }
+
+    private void savePWD(String text) {
+        SharedPreferences.Editor editor = setting.edit();
+        editor.putString(PREFERENCES_PWD, text);
+    }
+
+
 
 }

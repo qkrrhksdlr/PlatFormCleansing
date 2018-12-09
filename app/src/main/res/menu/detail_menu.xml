@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/favorite"
         android:icon="@android:drawable/star_big_off"
         android:title="favorite"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/call"
+        android:title="Call"
+        app:showAsAction="always"
+        android:icon="@drawable/phone_call"/>
+
+    <item
         android:id="@+id/delete"
         android:title="Delete"
         android:icon="@android:drawable/ic_menu_delete"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/edit_activity"
         android:title="EditActivity"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@android:drawable/ic_menu_edit"/>
 </menu>

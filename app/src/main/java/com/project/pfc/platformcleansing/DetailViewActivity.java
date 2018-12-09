@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap map;                      //맵
     private int setting;                        //즐겨찾기여부
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+   protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
 
@@ -39,7 +40,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         TextView detail_name = (TextView) findViewById(R.id.detail_name);                       //뷰 받아오기
         TextView detail_call = (TextView) findViewById(R.id.detail_call);
         TextView detail_capacity = (TextView) findViewById(R.id.detail_capacity);
-        TextView detail_address2 = (TextView) findViewById(R.id.detail_address);
+        TextView detail_address = (TextView) findViewById(R.id.detail_address);
         TextView detail_remarks = (TextView) findViewById(R.id.detail_remarks);
         TextView detail_user = (TextView) findViewById(R.id.detail_user);
         TextView detail_date = (TextView) findViewById(R.id.detail_date);
@@ -55,7 +56,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         detail_name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
         detail_call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
         detail_capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));
-        detail_address2.setText(cursor.getString(BunkerContract.CursorIndex.ADDRESS));
+        detail_address.setText(cursor.getString(BunkerContract.CursorIndex.ADDRESS));
         detail_remarks.setText(cursor.getString(BunkerContract.CursorIndex.REMAKRS));
         detail_user.setText(cursor.getString(BunkerContract.CursorIndex.User));
         detail_date.setText(cursor.getString(BunkerContract.CursorIndex.DATE));
@@ -80,6 +81,12 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.call :
+                cursor.moveToFirst();
+                String call = cursor.getString(BunkerContract.CursorIndex.CALL);
+                Intent implicit_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + call));
+                startActivity(implicit_intent);
+                return true;
             case R.id.favorite :                    //즐겨찾기 버튼 누를시 등록, 취소 변경
                 try{
                         if(setting == 1)

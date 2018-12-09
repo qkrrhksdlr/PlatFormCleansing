@@ -16,24 +16,49 @@
             android:text="이름"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:id="@+id/text_name"/>
-        <TextView
+            android:id="@+id/text_name"
+            android:layout_marginLeft="30dp"/>
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="010-3502-7378"
-            android:textSize="20sp"
-            android:id="@+id/text_call"/>
-        <TextView
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:src="@drawable/phone_call"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="010-3502-7378"
+                android:textSize="20sp"
+                android:id="@+id/text_call"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수용인원"
-            android:textSize="20sp"
-            android:id="@+id/text_capacity"/>
-        <TextView
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:src="@drawable/person"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수용인원"
+                android:textSize="20sp"
+                android:id="@+id/text_capacity"/>
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="주소"
-            android:id="@+id/text_address"/>
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="20dp"
+                android:src="@drawable/spot"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주소"
+                android:id="@+id/text_address"/>
+        </LinearLayout>
 
     </LinearLayout>
     <LinearLayout

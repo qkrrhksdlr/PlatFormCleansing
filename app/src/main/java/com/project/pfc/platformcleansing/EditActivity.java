@@ -95,12 +95,16 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.edit_save:
-                //여기에 저장 했을때 입력한 데이터들 들어가게끔
-                // 이름, 전화번호, 수용인원, 위도, 경도, 주소, 비고
+                saveDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveDialog();
     }
 
     @Override
@@ -190,4 +194,31 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
         builder.show();
     }
+    public void saveDialog(){                     //delete 버튼 클릭시 안내창
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save");
+        builder.setMessage("저장하시겠습니까?");
+        builder.setPositiveButton("저장", new DialogInterface.OnClickListener() {          //예  눌렀을 시
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String nameText = name.getText().toString();
+                String callText = call.getText().toString();
+                int capacityText = Integer.parseInt(capacity.getText().toString());
+
+            }
+        });
+        builder.setNegativeButton("저장하지 않음", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditActivity.super.onBackPressed();
+            }
+        });
+        builder.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
+
 }

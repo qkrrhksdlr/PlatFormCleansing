@@ -74,14 +74,14 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateBunkerData(String name, String call, double latitude, double longitude,
-                                 String address, int capacity, String reMarks, int _id) throws SQLException{  // 이미있는 내용 수정시 데이터베이스 수정
+                                 String address, int capacity, String reMarks, String imageUri ,int _id) throws SQLException{  // 이미있는 내용 수정시 데이터베이스 수정
         String sql = String.format(
-                "UPDATE %s SET %s = '%s', %s = '%s', %s = %f, %s = %f, %s = '%s', %s = %d, %s = '%s', %s = '%s' WHERE %s = %d",
+                "UPDATE %s SET %s = '%s', %s = '%s', %s = %f, %s = %f, %s = '%s', %s = %d, %s = '%s', %s = '%s', %s = '%s' WHERE %s = %d",
                 BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_NAME, name, BunkerContract.Bunkers.KEY_CALL, call,
                 BunkerContract.Bunkers.KEY_LATITUDE, latitude, BunkerContract.Bunkers.KEY_LONGITUDE, longitude,
                 BunkerContract.Bunkers.KEY_ADDRESS, address,
                 BunkerContract.Bunkers.KEY_CAPACITY, capacity, BunkerContract.Bunkers.KEY_DATE, getDate(),
-                BunkerContract.Bunkers.KEY_REMARKS, reMarks, BunkerContract.Bunkers._ID, _id
+                BunkerContract.Bunkers.KEY_REMARKS, reMarks, BunkerContract.Bunkers.KEY_IMAGE ,imageUri , BunkerContract.Bunkers._ID, _id
         );
 
         getWritableDatabase().execSQL(sql);

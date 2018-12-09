@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     TextView detail_remarks;
     TextView detail_user;
     TextView detail_date;
+    ImageView detail_image;
     @Override
    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +53,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         detail_remarks = (TextView) findViewById(R.id.detail_remarks);
         detail_user = (TextView) findViewById(R.id.detail_user);
         detail_date = (TextView) findViewById(R.id.detail_date);
+        detail_image = (ImageView) findViewById(R.id.detail_image);
 
     }
 
@@ -72,6 +75,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         detail_remarks.setText(cursor.getString(BunkerContract.CursorIndex.REMAKRS));
         detail_user.setText(cursor.getString(BunkerContract.CursorIndex.User));
         detail_date.setText(cursor.getString(BunkerContract.CursorIndex.DATE));
+        detail_image.setImageURI(Uri.parse("file://" + cursor.getString(BunkerContract.CursorIndex.Image)));
     }
 
     @Override

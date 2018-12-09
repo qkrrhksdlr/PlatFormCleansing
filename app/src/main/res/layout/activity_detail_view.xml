@@ -130,6 +130,7 @@
                     android:layout_height="@dimen/detail_image_size"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/bunker1"
+                    android:id="@+id/detail_image"
                     android:layout_weight="1"/>
 
             </LinearLayout>

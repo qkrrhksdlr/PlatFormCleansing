@@ -12,6 +12,7 @@ public class ListActivity extends AppCompatActivity implements SelectFragment.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         setTitle(R.string.main_app_name);
+        PermissionsStateCheck.setAllPermissions(ListActivity.this, 0);
     }
 
     @Override

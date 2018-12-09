@@ -8,7 +8,12 @@ import android.database.SQLException;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,6 +38,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +56,19 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Address geoAddress;
     private double lastLatitude;
     private double lastLongitude;
+    private File photoFile = null;
+    private String photoFileName = "image.jpg";
+    private Uri imgUri;
+
+    private final static int REQUEST_IMAGE_PICK = 0;
+    private final static int REQUEST_IMAGE_CAPTURE = 1;
 
     EditText name;
     EditText call;
     EditText capacity;
     EditText address;
     EditText remarks;
+    ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +88,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         capacity = (EditText) findViewById(R.id.edit_capacity);
         address = (EditText) findViewById(R.id.edit_address);
         remarks = (EditText) findViewById(R.id.edit_remarks);
-        ImageButton imageButton = findViewById(R.id.edit_image);
+        imageButton = findViewById(R.id.edit_image);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -187,6 +202,42 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             address.setText(geoAddress.getAddressLine(0).substring(5));   //대한민국자르기
         }
     }
+
+    private void dispatchPickPictureIntent(){
+        Intent picPicture = new Intent(Intent.ACTION_PICK);
+        picPicture.setType("image/*");
+        if(picPicture.resolveActivity(getPackageManager()) != null){
+            photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), photoFileName);
+            picPicture.setData(FileProvider.getUriForFile(this, "com.project.pfc.platformcleansing", photoFile));
+            startActivityForResult(picPicture, REQUEST_IMAGE_PICK);
+        }
+    }
+
+    private void dispatchTakePictureIntent(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(takePictureIntent.resolveActivity(getPackageManager()) != null){
+            photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), photoFileName);
+
+            if (photoFile != null){
+                Uri imageUri = FileProvider.getUriForFile(this, "com.project.pfc.platformcleansing", photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK){
+            imgUri = data.getData();
+            imageButton.setImageURI(imgUri);
+        } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+            imageButton.setImageURI(Uri.fromFile(photoFile));
+        }
+    }
+
     public void show(){                         //이미지 버튼 클릭 시 사진을 갤러리 or 카메라에서 가져올 것 선택하는 부분
         final List<String> ListItems = new ArrayList<>();
         ListItems.add("갤러리에서 가져오기");
@@ -212,9 +263,9 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(!SelectedItems.isEmpty()){
                     int index = (int) SelectedItems.get(0);
                     if(index == 0){
-
+                        dispatchPickPictureIntent();
                     } else if (index == 1) {
-
+                        dispatchTakePictureIntent();
                     }
                 }
             }
@@ -240,7 +291,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String remarksText = remarks.getText().toString();
                 try{
                     if(editFlag) {
-                        dbHelper.updateBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, cursor.getInt(BunkerContract.CursorIndex._ID));
+                        dbHelper.updateBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText,photoFile.toString() ,cursor.getInt(BunkerContract.CursorIndex._ID));
                     } else {
                         dbHelper.insertBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, "Admin");
                         setResult(RESULT_OK);
@@ -277,7 +328,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
-        public void searchShow()
+    public void searchShow()
     {
         final EditText edittext = new EditText(this);
 

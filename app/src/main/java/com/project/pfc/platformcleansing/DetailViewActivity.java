@@ -26,27 +26,38 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     private Cursor cursor;                      //데이터 받을 커서
     private GoogleMap map;                      //맵
     private int setting;                        //즐겨찾기여부
+
+    TextView detail_name;                      //뷰 받아오기
+    TextView detail_call;
+    TextView detail_capacity;
+    TextView detail_address;
+    TextView detail_remarks;
+    TextView detail_user;
+    TextView detail_date;
     @Override
    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_view);
 
-        Intent intent = getIntent();
         bunkerDBHelper = new BunkerDBHelper(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.detail_map);  //지도 연결
         mapFragment.getMapAsync(this);
 
-        TextView detail_name = (TextView) findViewById(R.id.detail_name);                       //뷰 받아오기
-        TextView detail_call = (TextView) findViewById(R.id.detail_call);
-        TextView detail_capacity = (TextView) findViewById(R.id.detail_capacity);
-        TextView detail_address = (TextView) findViewById(R.id.detail_address);
-        TextView detail_remarks = (TextView) findViewById(R.id.detail_remarks);
-        TextView detail_user = (TextView) findViewById(R.id.detail_user);
-        TextView detail_date = (TextView) findViewById(R.id.detail_date);
+        detail_name = (TextView) findViewById(R.id.detail_name);                       //뷰 받아오기
+        detail_call = (TextView) findViewById(R.id.detail_call);
+        detail_capacity = (TextView) findViewById(R.id.detail_capacity);
+        detail_address = (TextView) findViewById(R.id.detail_address);
+        detail_remarks = (TextView) findViewById(R.id.detail_remarks);
+        detail_user = (TextView) findViewById(R.id.detail_user);
+        detail_date = (TextView) findViewById(R.id.detail_date);
 
-        cursor = bunkerDBHelper.getDetailData(intent.getIntExtra("id", -1));
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cursor = bunkerDBHelper.getDetailData(getIntent().getIntExtra("id", -1));
         if (cursor == null) {                   //데이터 받아오기 실패 했을 때 메인으로 돌아감
             Toast.makeText(getApplicationContext(), "데이터를 불러오는데에 실패했습니다.\n다시 시도해 주세요", Toast.LENGTH_SHORT).show();
             finish();
@@ -61,7 +72,6 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         detail_remarks.setText(cursor.getString(BunkerContract.CursorIndex.REMAKRS));
         detail_user.setText(cursor.getString(BunkerContract.CursorIndex.User));
         detail_date.setText(cursor.getString(BunkerContract.CursorIndex.DATE));
-
     }
 
     @Override

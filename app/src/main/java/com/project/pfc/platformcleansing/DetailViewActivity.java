@@ -53,6 +53,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         }
 
         cursor.moveToNext();                            //항목에 데이터 입력
+        setTitle(cursor.getString(BunkerContract.CursorIndex.NAME)); // 타이틀바 대피소 이름
         detail_name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
         detail_call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
         detail_capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));
@@ -81,7 +82,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.call :
+            case R.id.call :                          // 전화번호 버튼 누를시 전화기능
                 cursor.moveToFirst();
                 String call = cursor.getString(BunkerContract.CursorIndex.CALL);
                 Intent implicit_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + call));

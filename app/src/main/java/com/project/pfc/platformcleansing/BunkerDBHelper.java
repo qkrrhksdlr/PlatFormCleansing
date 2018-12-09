@@ -52,17 +52,14 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     * 벙커 데이터베이스 관리
      */
     public void insertBunkerData (String name, String call, double latitude, double longitude,
-                                  String address, int capacity, String reMarks, String user){  // editActivity 에서 받아온 벙커 데이터 삽입
-        try{
+                                  String address, int capacity, String reMarks, String user) throws SQLException{  // editActivity 에서 받아온 벙커 데이터 삽입
             String sql = String.format(
-                    "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', '%d', '%s', '%s', %d, '%s', %d",
+                    "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', %d, '%s', '%s', %d, '%s', %d)",
                     BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address, capacity, getDate(), reMarks, 0, user, -1
             );
 
             getWritableDatabase().execSQL(sql);
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
+
     }
 
     public void deleteBunkerData(int _id) throws SQLException{   // 벙커 삭제시 데이터베이스에서 삭제
@@ -77,21 +74,17 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     }
 
     public void updateBunkerData(String name, String call, double latitude, double longitude,
-                                 String address, int capacity, String reMarks){  // 이미있는 내용 수정시 데이터베이스 수정
-        try{
-            String sql = String.format(
-                    "UPDATE %s SET %s = '%s', %s = '%s', %s = %f, %s = %f, %s = '%s', %s = %d, %s = '%s', %s = '%s' WHERE %s = %s",
-                    BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_NAME, name, BunkerContract.Bunkers.KEY_CALL, call,
-                    BunkerContract.Bunkers.KEY_LATITUDE, latitude, BunkerContract.Bunkers.KEY_LONGITUDE, longitude,
-                    BunkerContract.Bunkers.KEY_ADDRESS, address,
-                    BunkerContract.Bunkers.KEY_CAPACITY, capacity, BunkerContract.Bunkers.KEY_DATE, getDate(),
-                    BunkerContract.Bunkers.KEY_REMARKS, reMarks, BunkerContract.Bunkers.KEY_NAME, name
-            );
+                                 String address, int capacity, String reMarks, int _id) throws SQLException{  // 이미있는 내용 수정시 데이터베이스 수정
+        String sql = String.format(
+                "UPDATE %s SET %s = '%s', %s = '%s', %s = %f, %s = %f, %s = '%s', %s = %d, %s = '%s', %s = '%s' WHERE %s = %d",
+                BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_NAME, name, BunkerContract.Bunkers.KEY_CALL, call,
+                BunkerContract.Bunkers.KEY_LATITUDE, latitude, BunkerContract.Bunkers.KEY_LONGITUDE, longitude,
+                BunkerContract.Bunkers.KEY_ADDRESS, address,
+                BunkerContract.Bunkers.KEY_CAPACITY, capacity, BunkerContract.Bunkers.KEY_DATE, getDate(),
+                BunkerContract.Bunkers.KEY_REMARKS, reMarks, BunkerContract.Bunkers._ID, _id
+        );
 
-            getWritableDatabase().execSQL(sql);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
+        getWritableDatabase().execSQL(sql);
     }
 
     public ArrayList<BunkerItem> getListItemForDB(String string){   // 리스트뷰에 뿌려줄 아이템들만 모아서 받아오기
@@ -209,7 +202,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     public String getDate(){    //현재 날짜 반환
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
+        int month = cal.get(Calendar.MONTH) + 1;
         int day = cal.get(Calendar.DATE);
 
         String date = year + "-" + month + "-" + day;

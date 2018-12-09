@@ -4,15 +4,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -28,8 +33,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class EditActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap map;                      //맵
@@ -38,6 +45,9 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean editFlag;                   //true면 수정, false면 추가
     private FusedLocationProviderClient fusedLocationProviderClient;  //추가시 현재위치 받아오기 위함
     private Location lastLocation;                                      //위치 저장할 곳
+    private Address geoAddress;
+    private double lastLatitude;
+    private double lastLongitude;
 
     EditText name;
     EditText call;
@@ -59,6 +69,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         name = (EditText) findViewById(R.id.edit_name);
         call = (EditText) findViewById(R.id.edit_call);
+        call.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         capacity = (EditText) findViewById(R.id.edit_capacity);
         address = (EditText) findViewById(R.id.edit_address);
         remarks = (EditText) findViewById(R.id.edit_remarks);
@@ -67,6 +78,13 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 show();                             //image버튼 클릭시 사진 변경 or 추가
+            }
+        });
+        Button search = (Button) findViewById(R.id.search_button);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchShow();
             }
         });
 
@@ -113,9 +131,9 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(editFlag){           //수정 모드일 시 데이터베이스에서 넘어온 위도 경도로 카메라 이동 + 마커찍기
             cursor.moveToFirst();
             String name = cursor.getString(BunkerContract.CursorIndex.NAME);
-            double latitude = cursor.getDouble(BunkerContract.CursorIndex.LATITUDE);
-            double longitude = cursor.getDouble(BunkerContract.CursorIndex.LONGITUDE);
-            addMaker(latitude, longitude, name);
+            lastLatitude = cursor.getDouble(BunkerContract.CursorIndex.LATITUDE);
+            lastLongitude = cursor.getDouble(BunkerContract.CursorIndex.LONGITUDE);
+            addMaker(lastLatitude, lastLongitude, name);
         } else {                //추가 모드일 시 권한 확인 후 현재 위치로 이동 + 마커 찍기
             if(PermissionsStateCheck.permissionState(this, PermissionsStateCheck.permission_location)){
                 getLastLocation();
@@ -132,7 +150,9 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onSuccess(Location location) {
                 if (location != null){
                     lastLocation = location;
-                    addMaker(lastLocation.getLatitude(), lastLocation.getLongitude(), "현재위치");
+                    lastLatitude = location.getLatitude();
+                    lastLongitude = location.getLongitude();
+                    addMaker(lastLatitude, lastLongitude, "현재위치");
                 } else {
                     Toast.makeText(getApplicationContext(), "위치정보를 얻어오는데 실패했습니다!", Toast.LENGTH_SHORT).show();
                 }
@@ -151,9 +171,21 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public void addMaker(double latitude, double longitude, String name){
+        map.clear();                    //마커 지우기
         LatLng latLng = new LatLng(latitude, longitude);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         map.addMarker(new MarkerOptions().alpha(0.8f).title(name).position(latLng));
+    }
+
+    public void inputAddress(String string){
+        if(geoAddress != null){
+            lastLatitude = geoAddress.getLatitude();
+            lastLongitude = geoAddress.getLongitude();
+            addMaker(lastLatitude, lastLongitude, string);
+            name.setText(string);
+            call.setText(geoAddress.getPhone());
+            address.setText(geoAddress.getAddressLine(0).substring(5));   //대한민국자르기
+        }
     }
     public void show(){                         //이미지 버튼 클릭 시 사진을 갤러리 or 카메라에서 가져올 것 선택하는 부분
         final List<String> ListItems = new ArrayList<>();
@@ -204,7 +236,20 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 String nameText = name.getText().toString();
                 String callText = call.getText().toString();
                 int capacityText = Integer.parseInt(capacity.getText().toString());
-
+                String addressText = address.getText().toString();
+                String remarksText = remarks.getText().toString();
+                try{
+                    if(editFlag) {
+                        dbHelper.updateBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, cursor.getInt(BunkerContract.CursorIndex._ID));
+                    } else {
+                        dbHelper.insertBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, "Admin");
+                    }
+                    Toast.makeText(getApplicationContext(), "저장 성공", Toast.LENGTH_SHORT).show();
+                } catch (SQLException e){
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "저장 실패", Toast.LENGTH_SHORT).show();
+                }
+                EditActivity.super.onBackPressed();
             }
         });
         builder.setNegativeButton("저장하지 않음", new DialogInterface.OnClickListener() {
@@ -218,6 +263,39 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(DialogInterface dialog, int which) {
             }
         });
+        builder.show();
+    }
+    public void getAddress(String spot){
+        Geocoder geocoder = new Geocoder(this, Locale.KOREA);
+        try {
+            List<Address> addresses = geocoder.getFromLocationName(spot, 1);
+            geoAddress = addresses.get(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+        public void searchShow()
+    {
+        final EditText edittext = new EditText(this);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("장소검색");
+        builder.setMessage("장소를 입력하세요");
+        builder.setView(edittext);
+        builder.setPositiveButton("검색",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String spot = edittext.getText().toString();
+                        getAddress(spot);
+                        inputAddress(spot);
+                    }
+                });
+        builder.setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
         builder.show();
     }
 

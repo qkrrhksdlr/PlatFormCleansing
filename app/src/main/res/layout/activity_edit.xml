@@ -82,43 +82,7 @@
                             android:layout_weight="1"/>
                     </TableRow>
 
-                    <TableRow>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/detail_text_padding"
-                            android:text="주소검색"
-                            android:textStyle="bold"
-                            android:gravity="center"/>
-                        <EditText
-                            android:id="@+id/search_address"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/detail_text_padding"
-                            android:layout_weight="1"/>
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="검색"
-                            android:id="@+id/search_button"/>
-                    </TableRow>
 
-                    <!--<TableRow>-->
-                        <!--<TextView-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:padding="@dimen/detail_text_padding"-->
-                            <!--android:text="@string/detail_address1"-->
-                            <!--android:textStyle="bold"-->
-                            <!--android:gravity="center"/>-->
-                        <!--<EditText-->
-                            <!--android:id="@+id/edit_address1"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:padding="@dimen/detail_text_padding"-->
-                            <!--android:layout_weight="1"-->
-                            <!--android:focusable="false"/>-->
-                    <!--</TableRow>-->
                     <TableRow>
                         <TextView
                             android:layout_width="wrap_content"
@@ -135,6 +99,14 @@
                             android:padding="@dimen/detail_text_padding"
                             android:layout_weight="1"
                             android:focusable="false"/>
+                    </TableRow>
+                    <TableRow>
+                        <TextView/>
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="주소검색"
+                            android:id="@+id/search_button"/>
                     </TableRow>
                 </TableLayout>
 

@@ -11,17 +11,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:icon="@drawable/shelter"
-        android:label="@string/main_app_name"
+        android:label="@string/app"
         android:theme="@style/AppTheme">
         <!--대피소 목록-->
         <activity android:name=".SplashActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />   <!--SplashActivity 액션바 제거-->
-        <activity android:name=".ListActivity">
+            android:theme="@style/Theme.AppCompat.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity><!--SplashActivity 액션바 제거-->
+        <activity android:name=".ListActivity">
+
         </activity>
         <activity android:name=".MainActivity"
             android:parentActivityName=".ListActivity" />
@@ -29,7 +31,7 @@
             android:name=".DetailViewActivity" />
         <activity
             android:name=".EditActivity"
-            android:label="@string/edit_app_name"/>
+            android:title="@string/edit_app_name"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD6jbZoEzal_zNn8cWBcLBTEjOVy8dJnpA"/>

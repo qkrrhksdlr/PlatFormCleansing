@@ -64,7 +64,7 @@ public class SplashActivity extends AppCompatActivity {
         public void onAnimationEnd(Animation animation) {
             Log.i(TAG, "onAnimationEnd");
             finish();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), ListActivity.class));
         }
 
         @Override

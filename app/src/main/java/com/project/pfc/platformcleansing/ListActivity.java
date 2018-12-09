@@ -11,6 +11,7 @@ public class ListActivity extends AppCompatActivity implements SelectFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        setTitle(R.string.main_app_name);
     }
 
     @Override

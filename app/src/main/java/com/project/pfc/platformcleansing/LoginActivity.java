@@ -2,6 +2,8 @@ package com.project.pfc.platformcleansing;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,13 +12,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class LoginActivity extends AppCompatActivity {
     private BunkerDBHelper dbHelper;
+    SQLiteDatabase userDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        userDatabase = init_database();
 
         final TextView loginText = (TextView) findViewById(R.id.LOGIN_text);
         final Button btn_Signin = (Button) findViewById(R.id.btn_signin);
@@ -31,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String ID = editID.getText().toString();
                 Cursor cursor = dbHelper.getUserData(ID);
+                cursor.moveToFirst();
                 String PASSWORD = editPASS.getText().toString();
                 cursor = dbHelper.getUserData(PASSWORD);
                 String IDdata = cursor.getString(0);
@@ -55,5 +63,21 @@ public class LoginActivity extends AppCompatActivity {
                 btn_Signin.setEnabled(false);
             }
         });
+    }
+
+    private SQLiteDatabase init_database() {
+
+        SQLiteDatabase db = null;
+        File userfile = new File(getFilesDir(), "UserDatabase");
+        try{
+            db = SQLiteDatabase.openOrCreateDatabase(userfile, null);
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        if(db==null){
+            Toast.makeText(this, "데이터 베이스 불러오기 실패", Toast.LENGTH_SHORT).show();
+        }
+
+        return db;
     }
 }

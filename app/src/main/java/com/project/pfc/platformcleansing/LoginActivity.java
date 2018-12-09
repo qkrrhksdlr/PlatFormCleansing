@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
     private BunkerDBHelper dbHelper;
@@ -30,6 +31,17 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String ID = editID.getText().toString();
                 Cursor cursor = dbHelper.getUserData(ID);
+                String PASSWORD = editPASS.getText().toString();
+                cursor = dbHelper.getUserData(PASSWORD);
+                String IDdata = cursor.getString(0);
+                String PASSWORDdata = cursor.getString(1);
+
+                if(editID.equals(IDdata) && editPASS.equals(PASSWORDdata)){
+                    Toast.makeText(getApplicationContext(), "로그인성공춘", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 잘못입력하셨습니다", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

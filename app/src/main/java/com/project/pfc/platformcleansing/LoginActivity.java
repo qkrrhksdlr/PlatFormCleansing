@@ -1,35 +1,35 @@
 package com.project.pfc.platformcleansing;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
-
-    Intent userID = new Intent (getApplicationContext(), );
-    Intent userPWD = new Intent (getApplicationContext(),);
-
-    final TextView loginText = (TextView) findViewById(R.id.LOGIN_text);
-    final Button btn_Signin = (Button) findViewById(R.id.btn_signin);
-    final Button btn_Signup = (Button) findViewById(R.id.btn_signup);
+    private BunkerDBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        final TextView loginText = (TextView) findViewById(R.id.LOGIN_text);
+        final Button btn_Signin = (Button) findViewById(R.id.btn_signin);
+        final Button btn_Signup = (Button) findViewById(R.id.btn_signup);
+        final EditText editID = (EditText) findViewById(R.id.user_id);
+        final EditText editPASS = (EditText) findViewById(R.id.user_pwd);
 
+        dbHelper = new BunkerDBHelper(this);
 
         btn_Signin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent userID = new Intent (getApplicationContext(), );
-                Intent userPWD = new Intent (getApplicationContext(),);
-                startActivity(userID);
-                startActivity(userPWD);
+                String ID = editID.getText().toString();
+                Cursor cursor = dbHelper.getUserData(ID);
             }
         });
 

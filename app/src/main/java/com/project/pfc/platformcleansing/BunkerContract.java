@@ -42,8 +42,8 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public static class Users implements BaseColumns {        //사용자 아이디 비밀번호가 들어갈 테이블
-        public static final String TABLE_NAME = "사용자";
+    public static class Users{        //사용자 아이디 비밀번호가 들어갈 테이블
+        public static final String TABLE_NAME = "Users";
         public static final String _ID = "id";
         public static final String _PASS = "password";
 

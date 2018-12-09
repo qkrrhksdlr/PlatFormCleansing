@@ -201,6 +201,12 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Cursor getUserData(String ID){
+        String sql = String.format("SELECT * FROM %s WHERE %s = '%s",
+                BunkerContract.Users.TABLE_NAME, BunkerContract.Users._ID, ID);
+        return getReadableDatabase().rawQuery(sql, null);
+    }
+
     public String getDate(){    //현재 날짜 반환
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);

@@ -243,11 +243,13 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                         dbHelper.updateBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, cursor.getInt(BunkerContract.CursorIndex._ID));
                     } else {
                         dbHelper.insertBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, "Admin");
+                        setResult(RESULT_OK);
                     }
                     Toast.makeText(getApplicationContext(), "저장 성공", Toast.LENGTH_SHORT).show();
                 } catch (SQLException e){
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "저장 실패", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_CANCELED);
                 }
                 EditActivity.super.onBackPressed();
             }
@@ -255,6 +257,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         builder.setNegativeButton("저장하지 않음", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                setResult(RESULT_CANCELED);
                 EditActivity.super.onBackPressed();
             }
         });

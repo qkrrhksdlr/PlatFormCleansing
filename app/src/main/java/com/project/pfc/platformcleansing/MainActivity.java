@@ -3,6 +3,7 @@ package com.project.pfc.platformcleansing;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
@@ -97,10 +98,22 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_add:                                                               //추가 버튼 클릭 시 EditActivity 호출
                 Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
                 goToEdit.putExtra("edit", false);                   //추가 상태를 의미
-                startActivity(goToEdit);
+                startActivityForResult(goToEdit, 0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Cursor cursor = bunkerDBHelper.getReadableDatabase().rawQuery("SELECT * FROM " + BunkerContract.Bunkers.TABLE_NAME, null);
+            cursor.moveToLast();
+            Intent intentDetail = new Intent(getApplicationContext(), DetailViewActivity.class);
+            intentDetail.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));
+            startActivity(intentDetail);
         }
     }
 }

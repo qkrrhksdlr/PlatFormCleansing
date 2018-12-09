@@ -2,6 +2,7 @@ package com.project.pfc.platformcleansing;
 
 import android.content.Context;
 import android.database.SQLException;
+import android.net.Uri;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,7 @@ public class BunkerAdapter extends BaseAdapter {
         TextView capacity = (TextView) convertView.findViewById(R.id.text_capacity);
         TextView address = (TextView) convertView.findViewById(R.id.text_address);
         ImageButton favorite = (ImageButton) convertView.findViewById(R.id.btn_favorite);               //listView 아이템
+        ImageView image = (ImageView) convertView.findViewById(R.id.bunker_image);
 
         BunkerItem item = (BunkerItem)getItem(position);
 
@@ -61,7 +63,7 @@ public class BunkerAdapter extends BaseAdapter {
         call.setText(item.call);
         capacity.setText(Integer.toString(item.capacity));                 //텍스트 설정
         address.setText(item.address);
-
+        image.setImageURI(Uri.parse("file://" + item.image));
         final int star_on = android.R.drawable.star_on;
         final int star_off = android.R.drawable.star_off;
 
@@ -118,13 +120,15 @@ class BunkerItem{                   //메인 리스트에 보여줄 항목
     public int capacity;        //수용인원
     public int favorite;    //즐겨찾기여부
     public int _id;
+    public String image;
 
-    public BunkerItem(String name, String call, String address, int capacity, int favorite, int _id) {
+    public BunkerItem(String name, String call, String address, int capacity, int favorite, int _id, String image) {
         this.name = name;
         this.call = call;
         this.address = address;
         this.capacity = capacity;
         this.favorite = favorite;
         this._id = _id;
+        this.image = image;
     }
 }

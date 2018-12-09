@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditActivity"
-    android:orientation="vertical">
+    android:orientation="horizontal">
     <!--지도담을 공간-->
     <fragment
         android:layout_width="match_parent"
@@ -102,7 +102,7 @@
                             android:layout_weight="1"/>
                     </TableRow>
                     <TableRow>
-                        <TextView/>
+                        <TextView />
                         <Button
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -115,10 +115,10 @@
                     android:layout_width="@dimen/detail_image_size"
                     android:layout_height="@dimen/detail_image_size"
                     android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
                     android:src="@drawable/bunker1"
                     android:scaleType="fitCenter"
-                    android:layout_gravity="center_vertical"
                     android:id="@+id/edit_image"/>
 
             </LinearLayout>

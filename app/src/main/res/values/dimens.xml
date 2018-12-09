@@ -2,5 +2,5 @@
 <resources>
     <dimen name="detail_text_padding">5dp</dimen>
     <dimen name="detail_text_size">15sp</dimen>
-    <dimen name="detail_image_size">150dp</dimen>
+    <dimen name="detail_image_size">100dp</dimen>
 </resources>

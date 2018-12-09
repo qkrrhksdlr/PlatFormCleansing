@@ -52,10 +52,10 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     * 벙커 데이터베이스 관리
      */
     public void insertBunkerData (String name, String call, double latitude, double longitude,
-                                  String address, int capacity, String reMarks, String user) throws SQLException{  // editActivity 에서 받아온 벙커 데이터 삽입
+                                  String address, int capacity, String reMarks, String user, String image) throws SQLException{  // editActivity 에서 받아온 벙커 데이터 삽입
             String sql = String.format(
-                    "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', %d, '%s', '%s', %d, '%s', %d)",
-                    BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address, capacity, getDate(), reMarks, 0, user, -1
+                    "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', %d, '%s', '%s', %d, '%s', '%s')",
+                    BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address, capacity, getDate(), reMarks, 0, user, image
             );
 
             getWritableDatabase().execSQL(sql);
@@ -92,26 +92,26 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         switch (string) {
             case "전체":
                 sql = String.format(
-                        "SELECT %s, %s, %s, %s, %s, %s FROM %s",
+                        "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                        BunkerContract.Bunkers.KEY_ADDRESS,
+                        BunkerContract.Bunkers.KEY_ADDRESS, BunkerContract.Bunkers.KEY_IMAGE,
                         BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME
                 );
                 break;
             case "즐겨찾기":
                 sql = String.format(
-                        "SELECT %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
+                        "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                        BunkerContract.Bunkers.KEY_ADDRESS,
+                        BunkerContract.Bunkers.KEY_ADDRESS, BunkerContract.Bunkers.KEY_IMAGE,
                         BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
                         BunkerContract.Bunkers.KEY_FAVORITE, 1);
                 break;
             default:
-                sql = String.format("SELECT %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%'",
+                sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%'",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
-                        BunkerContract.Bunkers.KEY_ADDRESS,
+                        BunkerContract.Bunkers.KEY_ADDRESS, BunkerContract.Bunkers.KEY_IMAGE,
                         BunkerContract.Bunkers.KEY_CAPACITY, BunkerContract.Bunkers.KEY_FAVORITE,
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
                         BunkerContract.Bunkers.KEY_ADDRESS, string
@@ -128,11 +128,12 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
             String name = cursor.getString(0);
             String call = cursor.getString(1);
             String address = cursor.getString(2);
-            int capacity = cursor.getInt(3);
-            int favorite = cursor.getInt(4);
-            int _id = cursor.getInt(5);
+            String image = cursor.getString(3);
+            int capacity = cursor.getInt(4);
+            int favorite = cursor.getInt(5);
+            int _id = cursor.getInt(6);
 
-            listData.add(new BunkerItem(name, call, address, capacity, favorite, _id));
+            listData.add(new BunkerItem(name, call, address, capacity, favorite, _id, image));
         }
 
         return listData;

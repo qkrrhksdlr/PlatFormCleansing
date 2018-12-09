@@ -53,6 +53,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         }
 
         cursor.moveToNext();                            //항목에 데이터 입력
+        setTitle(cursor.getString(BunkerContract.CursorIndex.NAME)); // 타이틀바 대피소 목록
         detail_name.setText(cursor.getString(BunkerContract.CursorIndex.NAME));
         detail_call.setText(cursor.getString(BunkerContract.CursorIndex.CALL));
         detail_capacity.setText(cursor.getString(BunkerContract.CursorIndex.CAPACITY));

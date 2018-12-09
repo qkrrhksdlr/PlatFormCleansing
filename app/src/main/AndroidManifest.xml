@@ -28,7 +28,8 @@
         <activity
             android:name=".DetailViewActivity" />
         <activity
-            android:name=".EditActivity" />
+            android:name=".EditActivity"
+            android:label="@string/edit_app_name"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD6jbZoEzal_zNn8cWBcLBTEjOVy8dJnpA"/>

@@ -134,7 +134,6 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         while(cursor.moveToNext()){
             String name = cursor.getString(0);
             String call = cursor.getString(1);
-            //String address1 = cursor.getString(2);
             String address = cursor.getString(2);
             int capacity = cursor.getInt(3);
             int favorite = cursor.getInt(4);

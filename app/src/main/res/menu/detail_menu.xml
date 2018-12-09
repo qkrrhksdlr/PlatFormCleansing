@@ -8,18 +8,18 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/call"
-        android:title="Call"
-        app:showAsAction="always"
+        android:title="전화걸기"
+        app:showAsAction="never"
         android:icon="@drawable/phone_call"/>
 
     <item
         android:id="@+id/delete"
-        android:title="Delete"
+        android:title="삭제하기"
         android:icon="@android:drawable/ic_menu_delete"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
     <item
         android:id="@+id/edit_activity"
-        android:title="EditActivity"
-        app:showAsAction="always"
+        android:title="수정"
+        app:showAsAction="never"
         android:icon="@android:drawable/ic_menu_edit"/>
 </menu>

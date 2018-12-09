@@ -52,7 +52,7 @@ public class BunkerAdapter extends BaseAdapter {
         TextView name = (TextView) convertView.findViewById(R.id.text_name);
         TextView call = (TextView) convertView.findViewById(R.id.text_call);
         TextView capacity = (TextView) convertView.findViewById(R.id.text_capacity);
-        TextView address2 = (TextView) convertView.findViewById(R.id.text_address);
+        TextView address = (TextView) convertView.findViewById(R.id.text_address);
         ImageButton favorite = (ImageButton) convertView.findViewById(R.id.btn_favorite);               //listView 아이템
 
         BunkerItem item = (BunkerItem)getItem(position);
@@ -60,8 +60,7 @@ public class BunkerAdapter extends BaseAdapter {
         name.setText(item.name);
         call.setText(item.call);
         capacity.setText(Integer.toString(item.capacity));                 //텍스트 설정
-        //address1.setText(item.address1);
-        address2.setText(item.address2);
+        address.setText(item.address);
 
         final int star_on = android.R.drawable.star_on;
         final int star_off = android.R.drawable.star_off;
@@ -115,15 +114,15 @@ public class BunkerAdapter extends BaseAdapter {
 class BunkerItem{                   //메인 리스트에 보여줄 항목
     public String name;        //대피소명
     public String call;        //전화번호
-    public String address2;     //지번주소
+    public String address;     //주소
     public int capacity;        //수용인원
     public int favorite;    //즐겨찾기여부
     public int _id;
 
-    public BunkerItem(String name, String call, String address2, int capacity, int favorite, int _id) {
+    public BunkerItem(String name, String call, String address, int capacity, int favorite, int _id) {
         this.name = name;
         this.call = call;
-        this.address2 = address2;
+        this.address = address;
         this.capacity = capacity;
         this.favorite = favorite;
         this._id = _id;

@@ -51,8 +51,11 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
+        int Index = getIntent().getIntExtra("index", -1);
+
         MainFragment mainFragment = new MainFragment();
-        mainFragment.setIndex(getIntent().getIntExtra("index", -1));
+        mainFragment.setIndex(Index);
+        setTitle(SelectFragment.list[Index]);
         getSupportFragmentManager().beginTransaction().replace(R.id.mainFragment, mainFragment).commit();
     }
 

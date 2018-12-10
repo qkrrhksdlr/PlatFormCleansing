@@ -154,10 +154,15 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
                 deleteDialog();  //삭제 확인 안내창 띄움
                 return true;
             case R.id.edit_activity:
-                Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);      //editActivity 로 이동
-                goToEdit.putExtra("edit", true);                                    // 수정상태를 의미
-                goToEdit.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));
-                startActivity(goToEdit);
+                if(LoginActivity.LoginFlag) {
+                    Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);      //editActivity 로 이동
+                    goToEdit.putExtra("edit", true);                                    // 수정상태를 의미
+                    goToEdit.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));
+                    startActivity(goToEdit);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "로그인이 필요한 서비스 입니다", Toast.LENGTH_LONG);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

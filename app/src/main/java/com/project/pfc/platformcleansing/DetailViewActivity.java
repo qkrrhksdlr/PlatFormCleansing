@@ -108,7 +108,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
                             setting = 0;
                         else
                             setting = 1;
-                        String sql = String.format("UPDATE %s SET %s = %d WHERE %s = %s",
+                        String sql = String.format("UPDATE %s SET %s = %d WHERE %s = %d",
                                 BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_FAVORITE,
                                 setting, BunkerContract.Bunkers._ID, cursor.getInt(BunkerContract.CursorIndex._ID)
                         );

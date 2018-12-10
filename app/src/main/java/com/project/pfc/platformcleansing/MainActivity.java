@@ -115,9 +115,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){        //메뉴 아이템 이벤트 처리
         switch (item.getItemId()){
             case R.id.action_add:                                                               //추가 버튼 클릭 시 EditActivity 호출
-                Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
-                goToEdit.putExtra("edit", false);                   //추가 상태를 의미
-                startActivityForResult(goToEdit, 0);
+                if(LoginActivity.LoginFlag) {
+                    Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
+                    goToEdit.putExtra("edit", false);                   //추가 상태를 의미
+                    startActivityForResult(goToEdit, 0);
+                } else {
+                    Toast.makeText(getApplicationContext(), "로그인이 필요한 서비스 입니다", Toast.LENGTH_LONG);
+                }
                 return true;
             case R.id.main_loginButton :
                 if(LoginActivity.LoginFlag){

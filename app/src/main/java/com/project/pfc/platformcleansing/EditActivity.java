@@ -71,6 +71,8 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private final static int REQUEST_IMAGE_PICK = 0;
     private final static int REQUEST_IMAGE_CAPTURE = 1;
+    private final static int REQUEST_PERMISSIONS_LOCATION = 2;
+
 
     EditText name;
     EditText call;
@@ -103,7 +105,6 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 getPhotoDialog();                             //image버튼 클릭시 사진 변경 or 추가
-                pickCapture = true;
             }
         });
         Button search = (Button) findViewById(R.id.search_button);
@@ -111,6 +112,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(View v) {
                 searchShow();
+
             }
         });
 
@@ -168,7 +170,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(PermissionsStateCheck.permissionState(this, PermissionsStateCheck.permission_location)){
                 getLastLocation();
             } else {
-                PermissionsStateCheck.setPermissions(EditActivity.this, PermissionsStateCheck.permission_location, 1);
+                PermissionsStateCheck.setPermissions(EditActivity.this, PermissionsStateCheck.permission_location, REQUEST_PERMISSIONS_LOCATION);
             }
         }
     }
@@ -193,10 +195,18 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if(grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                requestCode == REQUEST_PERMISSIONS_LOCATION){
             getLastLocation();
+        } else if(grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                requestCode == REQUEST_IMAGE_PICK){
+            dispatchPickPictureIntent();
+        } else if(grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                requestCode == REQUEST_IMAGE_CAPTURE){
+            dispatchTakePictureIntent();
         }
     }
 
@@ -221,6 +231,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void dispatchPickPictureIntent(){
         Intent picPicture = new Intent(Intent.ACTION_PICK);
         picPicture.setType("image/*");
+        pickCapture = true;
         if(picPicture.resolveActivity(getPackageManager()) != null){
             photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), photoFileName);
             picPicture.setData(FileProvider.getUriForFile(this, "com.project.pfc.platformcleansing", photoFile));
@@ -230,7 +241,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void dispatchTakePictureIntent(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
+        pickCapture = true;
         if(takePictureIntent.resolveActivity(getPackageManager()) != null){
             photoFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), photoFileName);
 
@@ -253,22 +264,23 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             photoFile = new File(imageFilePath);
             pathCursor.close();
         } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){ }
-
-        Bitmap bit = BitmapFactory.decodeFile(photoFile.toString());
-        ExifInterface exifInterface = null;
-        try{
-            exifInterface = new ExifInterface(photoFile.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(photoFile != null && photoFile.exists()) {
+            Bitmap bit = BitmapFactory.decodeFile(photoFile.toString());
+            ExifInterface exifInterface = null;
+            try {
+                exifInterface = new ExifInterface(photoFile.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int exifOrientation;
+            int exifDegree = 0;
+            if (exifInterface != null) {
+                exifOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                exifDegree = exifOrientationToDegrees(exifOrientation);
+            }
+            bitmap = rotate(bit, exifDegree);
+            imageButton.setImageBitmap(bitmap);
         }
-        int exifOrientation;
-        int exifDegree = 0;
-        if(exifInterface != null){
-            exifOrientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-            exifDegree = exifOrientationToDegrees(exifOrientation);
-        }
-        bitmap = rotate(bit, exifDegree);
-        imageButton.setImageBitmap(bitmap);
     }
     public int exifOrientationToDegrees(int exifOrientation){
         if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90){
@@ -335,9 +347,17 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if(!SelectedItems.isEmpty()){
                     int index = (int) SelectedItems.get(0);
                     if(index == 0){
-                        dispatchPickPictureIntent();
+                        if(!PermissionsStateCheck.permissionState(EditActivity.this, PermissionsStateCheck.permission_write_external)) {
+                            PermissionsStateCheck.setPermissions(EditActivity.this, PermissionsStateCheck.permission_write_external, REQUEST_IMAGE_PICK);
+                        } else {
+                            dispatchPickPictureIntent();
+                        }
                     } else if (index == 1) {
-                        dispatchTakePictureIntent();
+                        if(!PermissionsStateCheck.permissionState(EditActivity.this, PermissionsStateCheck.permission_write_external)) {
+                            PermissionsStateCheck.setPermissions(EditActivity.this, PermissionsStateCheck.permission_write_external, REQUEST_IMAGE_CAPTURE);
+                        } else {
+                            dispatchTakePictureIntent();
+                        }
                     }
                 }
             }
@@ -381,7 +401,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Toast.makeText(getApplicationContext(), "저장 실패", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_CANCELED);
                 } finally {
-                    EditActivity.super.onBackPressed();
+                    finish();
                 }
             }
         });
@@ -391,7 +411,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setResult(RESULT_CANCELED);
                 if(photoFile != null &&!photoFile.exists())
                     photoFile.delete();
-                EditActivity.super.onBackPressed();
+                finish();
             }
         });
         builder.setNeutralButton("취소", new DialogInterface.OnClickListener() {

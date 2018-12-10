@@ -164,7 +164,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
 
     public void insertUserData(String ID , String passWord){    //회원가입시
         try{
-            String sql = String.format("INSERT INTO %s VALUES ('%s '%s')",
+            String sql = String.format("INSERT INTO %s VALUES ('%s', '%s')",
                     BunkerContract.Users.TABLE_NAME, ID, passWord);
 
             getWritableDatabase().execSQL(sql);
@@ -195,7 +195,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getUserData(String ID){
-        String sql = String.format("SELECT * FROM %s WHERE %s = '%s",
+        String sql = String.format("SELECT * FROM %s WHERE %s = '%s'",
                 BunkerContract.Users.TABLE_NAME, BunkerContract.Users._ID, ID);
         return getReadableDatabase().rawQuery(sql, null);
     }

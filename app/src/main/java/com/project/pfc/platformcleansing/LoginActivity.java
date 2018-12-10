@@ -24,10 +24,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private BunkerDBHelper dbHelper;
 
-    final Button btn_SignIn = (Button) findViewById(R.id.btn_signin);
-    final Button btn_SignUp = (Button) findViewById(R.id.btn_signup);
-    final EditText editID = (EditText) findViewById(R.id.user_id);
-    final EditText editPASS = (EditText) findViewById(R.id.user_pwd);
+    Button btn_SignIn;
+    Button btn_SignUp;
+    EditText editID;
+    EditText editPASS;
 
 
     @Override
@@ -38,6 +38,10 @@ public class LoginActivity extends AppCompatActivity {
         setting = getSharedPreferences(PREFERENCES_ID, MODE_PRIVATE);
 
         dbHelper = new BunkerDBHelper(this);
+        btn_SignIn = (Button) findViewById(R.id.btn_signin);
+        btn_SignUp = (Button) findViewById(R.id.btn_signup);
+        editID = (EditText) findViewById(R.id.user_id);
+        editPASS = (EditText) findViewById(R.id.user_pwd);
 
         getIDPass();
 
@@ -46,12 +50,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String inputID = editID.getText().toString();
                 String inputPass = editPASS.getText().toString();
-
+                String IDdata = "";
+                String PASSWORDdata = "";
                 Cursor cursor = dbHelper.getUserData(inputID);
-                cursor.moveToFirst();
-
-                String IDdata = cursor.getString(0);
-                String PASSWORDdata = cursor.getString(1);
+                if(cursor.moveToNext()) {
+                    IDdata = cursor.getString(0);
+                    PASSWORDdata = cursor.getString(1);
+                }
                 saveID(inputID);
                 savePWD(inputPass);
 
@@ -59,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                     LoginFlag = true;
                     LoginID = IDdata;
                     Toast.makeText(getApplicationContext(), "LOGIN SUCCESSFUL", Toast.LENGTH_LONG).show();
+                    LoginActivity.super.onBackPressed();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "아이디 또는 비밀번호를 잘못입력하셨습니다", Toast.LENGTH_LONG).show();

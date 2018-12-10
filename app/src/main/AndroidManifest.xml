@@ -33,6 +33,7 @@
         <activity
             android:name=".EditActivity"
             android:title="@string/edit_app_name"/>
+        <activity android:name=".LoginActivity"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyD6jbZoEzal_zNn8cWBcLBTEjOVy8dJnpA"/>

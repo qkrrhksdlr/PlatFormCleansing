@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -89,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_sort_by_size);
+        MenuItem loginItem = menu.findItem(R.id.loginButton);
+        if(LoginActivity.LoginFlag){
+            loginItem.setTitle(R.string.alreday_login);
+        } else {
+            loginItem.setTitle(R.string.not_login);
+        }
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -99,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);
                 goToEdit.putExtra("edit", false);                   //추가 상태를 의미
                 startActivityForResult(goToEdit, 0);
+                return true;
+            case R.id.loginButton :
+                if(LoginActivity.LoginFlag){
+                    LoginActivity.LoginID = null;
+                    LoginActivity.LoginFlag = false;
+                    item.setTitle(R.string.not_login);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -116,8 +116,7 @@
                     android:layout_height="@dimen/detail_image_size"
                     android:layout_alignParentRight="true"
                     android:layout_gravity="center_vertical"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/bunker1"
+                    android:background="@android:drawable/ic_input_add"
                     android:scaleType="fitCenter"
                     android:id="@+id/edit_image"/>
 

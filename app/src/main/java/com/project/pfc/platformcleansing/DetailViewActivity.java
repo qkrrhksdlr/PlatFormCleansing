@@ -92,6 +92,17 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
 
         return  super.onCreateOptionsMenu(menu);
     }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        MenuItem loginItem = menu.findItem(R.id.detail_loginButton);
+        if(LoginActivity.LoginFlag){
+            loginItem.setTitle(R.string.alreday_login);
+        } else {
+            loginItem.setTitle(R.string.not_login);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -130,6 +141,15 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
                     e.printStackTrace();
                 }
                 return true;
+            case R.id.detail_loginButton :
+                if(LoginActivity.LoginFlag){
+                    LoginActivity.LoginID = null;
+                    LoginActivity.LoginFlag = false;
+                    item.setTitle(R.string.not_login);
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
             case R.id.delete :
                 deleteDialog();  //삭제 확인 안내창 띄움
                 return true;

@@ -4,7 +4,7 @@
     <!--추가 아이템-->
     <item
         android:title="Login"
-        android:id="@+id/loginButton"
+        android:id="@+id/main_loginButton"
         app:showAsAction="never" />
     <item
         android:title="Add"

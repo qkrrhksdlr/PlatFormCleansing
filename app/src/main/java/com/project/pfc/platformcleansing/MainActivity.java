@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setHomeAsUpIndicator(android.R.drawable.ic_menu_sort_by_size);
-        MenuItem loginItem = menu.findItem(R.id.loginButton);
+        MenuItem loginItem = menu.findItem(R.id.main_loginButton);
         if(LoginActivity.LoginFlag){
             loginItem.setTitle(R.string.alreday_login);
         } else {
@@ -99,6 +99,18 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        MenuItem loginItem = menu.findItem(R.id.main_loginButton);
+        if(LoginActivity.LoginFlag){
+            loginItem.setTitle(R.string.alreday_login);
+        } else {
+            loginItem.setTitle(R.string.not_login);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){        //메뉴 아이템 이벤트 처리
         switch (item.getItemId()){
@@ -107,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 goToEdit.putExtra("edit", false);                   //추가 상태를 의미
                 startActivityForResult(goToEdit, 0);
                 return true;
-            case R.id.loginButton :
+            case R.id.main_loginButton :
                 if(LoginActivity.LoginFlag){
                     LoginActivity.LoginID = null;
                     LoginActivity.LoginFlag = false;

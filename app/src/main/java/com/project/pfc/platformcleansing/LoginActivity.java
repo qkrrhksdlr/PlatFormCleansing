@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
-    public static final String fileName = "LastLogin";
+
     public static final String PREFERENCES_ID = "ID";
     public static final String PREFERENCES_PWD = "PASS";
 
@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 String IDdata = cursor.getString(0);
                 String PASSWORDdata = cursor.getString(1);
+                saveID(inputID);
+                savePWD(inputPass);
 
                 if(inputID.equals(IDdata) && inputPass.equals(PASSWORDdata)){
                     LoginFlag = true;

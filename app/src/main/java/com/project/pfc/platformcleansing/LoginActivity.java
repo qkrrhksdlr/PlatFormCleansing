@@ -65,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(inputID.equals(IDdata) && inputPass.equals(PASSWORDdata)){           //로그인 성공
                     LoginFlag = true;
                     LoginID = IDdata;
-                    Toast.makeText(getApplicationContext(), LoginID + R.string.login_success, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), LoginID + getResources().getString(R.string.login_success), Toast.LENGTH_LONG).show();
                     finish();
                 }
                 else{

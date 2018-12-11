@@ -29,7 +29,9 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/user_id"/>
+                android:id="@+id/user_id"
+                android:privateImeOptions="defaultInputmode=english"
+                android:inputType="text"/>
         </TableRow>
         <TableRow>
             <TextView
@@ -41,7 +43,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/user_pwd"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:imeOptions="actionDone"
+                />
         </TableRow>
     </TableLayout>
     <LinearLayout
@@ -59,7 +63,7 @@
         android:layout_height="wrap_content"
         android:text="회원가입"
         android:id="@+id/btn_signup"/>
-</LinearLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -21,7 +21,7 @@ public class BunkerAdapter extends BaseAdapter {
     private ArrayList<BunkerItem> data;                         //데이터가 저장된 배열
     private BunkerDBHelper database;
 
-    public BunkerAdapter(Context context, ArrayList<BunkerItem> data, BunkerDBHelper database){
+    public BunkerAdapter(Context context, ArrayList<BunkerItem> data, BunkerDBHelper database){     //생성자
         this.context = context;
         this.data = data;
         this.database = database;
@@ -90,19 +90,19 @@ public class BunkerAdapter extends BaseAdapter {
                             BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_FAVORITE,
                             setting, BunkerContract.Bunkers.KEY_NAME, item.name
                     );
-                    database.WriteDBtoString(sql);
+                    database.getWritableDatabase().execSQL(sql);      //즐겨찾기 데이터 변경
 
                     if(setting == 1){
                         favorite.setImageResource(star_on);
-                        Toast.makeText(context, "즐겨찾기목록에 추가하였습니다. ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.favorit_on_toast, Toast.LENGTH_SHORT).show();
                     } else{
                         favorite.setImageResource(star_off);
-                        Toast.makeText(context, "즐겨찾기목록에서 삭제되었습니다. ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, R.string.favorit_off_toast, Toast.LENGTH_SHORT).show();
                     }
 
                     ((BunkerItem)getItem(pos)).favorite = setting;   //현재 리스트뷰에 favorite값 업데이트 해주기 위함
-                } catch (SQLException e){
-                    Toast.makeText(context, "실패했습니다!", Toast.LENGTH_SHORT).show();
+                } catch (SQLException e){                               //실패시 취소
+                    Toast.makeText(context, R.string.favorit_fail_toast, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
 
@@ -119,8 +119,8 @@ class BunkerItem{                   //메인 리스트에 보여줄 항목
     public String address;     //주소
     public int capacity;        //수용인원
     public int favorite;    //즐겨찾기여부
-    public int _id;
-    public String image;
+    public int _id;          //행값
+    public String image;       //이미지 경로
 
     public BunkerItem(String name, String call, String address, int capacity, int favorite, int _id, String image) {
         this.name = name;

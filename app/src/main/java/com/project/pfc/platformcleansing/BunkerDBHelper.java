@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class BunkerDBHelper extends SQLiteOpenHelper {
-    public static final String DBLOCATION = "/data/data/com.project.pfc.platformcleansing/databases/";
+    public static final String DBLOCATION = "/data/data/com.project.pfc.platformcleansing/databases/";              //미리 넣어놓을 데이터베이스 경로
     private Context context;
     private SQLiteDatabase database;
     public BunkerDBHelper(Context context){
@@ -51,15 +51,22 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     /*
     * 벙커 데이터베이스 관리
      */
-    public void insertBunkerData (String name, String call, double latitude, double longitude,
+    public boolean insertBunkerData (String name, String call, double latitude, double longitude,
                                   String address, int capacity, String reMarks, String user, String image) throws SQLException{  // editActivity 에서 받아온 벙커 데이터 삽입
-            String sql = String.format(
-                    "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', %d, '%s', '%s', %d, '%s', '%s')",
-                    BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address, capacity, getDate(), reMarks, 0, user, image
-            );
+        String getData = String.format("SELECT * FROM %s WHERE %s = %f AND %s = %f",
+                BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_LATITUDE,
+                latitude, BunkerContract.Bunkers.KEY_LONGITUDE, longitude);                     //입력한 위도 경도값을 기준으로 같은 장소가 존재하는지 확인
+        Cursor cursor = getReadableDatabase().rawQuery(getData, null);
 
-            getWritableDatabase().execSQL(sql);
-
+        if(cursor.moveToNext()){                                                    //커서에 받아온 데이터가 있으면 중복 데이터가 있는 것이므로 false 리턴
+            return false;
+        }
+        String sql = String.format(
+                "INSERT INTO %s VALUES (NULL, '%s', '%s', %f, %f, '%s', %d, '%s', '%s', %d, '%s', '%s')",
+                BunkerContract.Bunkers.TABLE_NAME, name, call, latitude, longitude, address, capacity, getDate(), reMarks, 0, user, image
+        );
+        getWritableDatabase().execSQL(sql);
+        return true;
     }
 
     public void deleteBunkerData(int _id) throws SQLException{   // 벙커 삭제시 데이터베이스에서 삭제
@@ -90,7 +97,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
     public ArrayList<BunkerItem> getListItemForDB(String string){   // 리스트뷰에 뿌려줄 아이템들만 모아서 받아오기
         String sql;
         switch (string) {
-            case "전체":
+            case "전체":              //전체다
                 sql = String.format(
                         "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
@@ -99,7 +106,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME
                 );
                 break;
-            case "즐겨찾기":
+            case "즐겨찾기":            //즐겨찾기 설정한 부분
                 sql = String.format(
                         "SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s = %s",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
@@ -108,7 +115,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
                         BunkerContract.Bunkers._ID, BunkerContract.Bunkers.TABLE_NAME,
                         BunkerContract.Bunkers.KEY_FAVORITE, 1);
                 break;
-            default:
+            default:                //지역마다
                 sql = String.format("SELECT %s, %s, %s, %s, %s, %s, %s FROM %s WHERE %s LIKE '%s%%'",
                         BunkerContract.Bunkers.KEY_NAME, BunkerContract.Bunkers.KEY_CALL,
                         BunkerContract.Bunkers.KEY_ADDRESS, BunkerContract.Bunkers.KEY_IMAGE,
@@ -124,7 +131,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         Cursor cursor = getReadableDatabase().rawQuery(sql, null);
         ArrayList<BunkerItem> listData = new ArrayList<BunkerItem>();
 
-        while(cursor.moveToNext()){
+        while(cursor.moveToNext()){         //커서에서 받아온 아이템을 필요한 것만 ArrayList에 넣음
             String name = cursor.getString(0);
             String call = cursor.getString(1);
             String address = cursor.getString(2);
@@ -139,7 +146,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         return listData;
     }
 
-    public Cursor getDetailData(int _id){         // 디테일뷰에 보여줄 한 튜플 받아오기
+    public Cursor getDetailData(int _id){         // 디테일뷰에 보여줄 한 레코드 받아오기
         Cursor cursor;
         if(_id == -1){
             cursor = null;
@@ -153,24 +160,28 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         return cursor;
     }
 
-    public void WriteDBtoString(String sql) throws SQLException{
-        getWritableDatabase().execSQL(sql);
-    }
-
 
     /*
     * 유저 데이터베이스관리
      */
 
-    public void insertUserData(String ID , String passWord){    //회원가입시
+    public boolean insertUserData(String ID , String passWord){    //회원가입시
         try{
+            String getUserID = String.format("SELECT * FROM %s WHERE %s = '%s'",
+                    BunkerContract.Users.TABLE_NAME, BunkerContract.Users._ID,
+                    ID);
+            Cursor cursor = getReadableDatabase().rawQuery(getUserID, null);        //회원가입 중복 확인
+            if(cursor.moveToNext()){
+                return false;
+            }
             String sql = String.format("INSERT INTO %s VALUES ('%s', '%s')",
                     BunkerContract.Users.TABLE_NAME, ID, passWord);
-
             getWritableDatabase().execSQL(sql);
         }catch (SQLException e){
             e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public void deleteUserData(String ID){           //회원 탈퇴시
@@ -184,17 +195,7 @@ public class BunkerDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateUserData(String ID, String passWord){    // 비밀번호 변경
-        try{
-            String sql = String.format("UPDATE  %s SET %s = '%s' WHERE %s = %s",
-            BunkerContract.Users.TABLE_NAME, BunkerContract.Users._PASS, passWord, BunkerContract.Users._ID, ID);
-            getWritableDatabase().execSQL(sql);
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    public Cursor getUserData(String ID){
+    public Cursor getUserData(String ID){           //로그인 시 아이디 비밀번호 체크용
         String sql = String.format("SELECT * FROM %s WHERE %s = '%s'",
                 BunkerContract.Users.TABLE_NAME, BunkerContract.Users._ID, ID);
         return getReadableDatabase().rawQuery(sql, null);

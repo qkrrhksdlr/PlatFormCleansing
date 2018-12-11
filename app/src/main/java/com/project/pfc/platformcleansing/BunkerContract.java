@@ -26,7 +26,6 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String KEY_FAVORITE = "Favorite";
         public static final String KEY_USER = "User";
         public static final String KEY_IMAGE = "Image";
-        //public static final String image_path =
         
         /*
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" + _ID + INT_TYPE  + " PRIMARY KEY" + COMMA +
@@ -52,7 +51,7 @@ public final class BunkerContract {                    //대피소 관련정보,
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     }
-    public static class CursorIndex{
+    public static class CursorIndex{                //커서에서 레코드 받아올때 레코드 인덱스 값
         public static final int _ID = 0;
         public static final int NAME = 1;
         public static final int CALL = 2;

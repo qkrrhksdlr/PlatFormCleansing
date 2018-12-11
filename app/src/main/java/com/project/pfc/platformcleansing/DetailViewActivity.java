@@ -27,8 +27,9 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     private Cursor cursor;                      //데이터 받을 커서
     private GoogleMap map;                      //맵
     private int setting;                        //즐겨찾기여부
+    private MenuItem loginItem;                 //로그인 버튼 저장소
 
-    TextView detail_name;                      //뷰 받아오기
+    TextView detail_name;                      //위젯 받아오기
     TextView detail_call;
     TextView detail_capacity;
     TextView detail_address;
@@ -46,7 +47,7 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.detail_map);  //지도 연결
         mapFragment.getMapAsync(this);
 
-        detail_name = (TextView) findViewById(R.id.detail_name);                       //뷰 받아오기
+        detail_name = (TextView) findViewById(R.id.detail_name);                       //위젯 받아오기
         detail_call = (TextView) findViewById(R.id.detail_call);
         detail_capacity = (TextView) findViewById(R.id.detail_capacity);
         detail_address = (TextView) findViewById(R.id.detail_address);
@@ -58,11 +59,11 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume() {     //다시 돌아왔을때 데이터 갱신 위함
         super.onResume();
         cursor = bunkerDBHelper.getDetailData(getIntent().getIntExtra("id", -1));
         if (cursor == null) {                   //데이터 받아오기 실패 했을 때 메인으로 돌아감
-            Toast.makeText(getApplicationContext(), "데이터를 불러오는데에 실패했습니다.\n다시 시도해 주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.data_not_find, Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -89,16 +90,17 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         } else {
             btn_favorite.setIcon(android.R.drawable.star_big_off);
         }
+        loginItem = menu.findItem(R.id.detail_loginButton);     //로그인 아이템 넣음
 
         return  super.onCreateOptionsMenu(menu);
     }
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu){         //로그인 버튼 실시간 변경
         MenuItem loginItem = menu.findItem(R.id.detail_loginButton);
         if(LoginActivity.LoginFlag){
-            loginItem.setTitle(R.string.alreday_login);
+            loginItem.setTitle(R.string.logout);
         } else {
-            loginItem.setTitle(R.string.not_login);
+            loginItem.setTitle(R.string.login);
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -107,10 +109,10 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.call :
+            case R.id.call :                //벙커에 저장된 전화번호로 전화걸기
                 cursor.moveToFirst();
                 String call = cursor.getString(BunkerContract.CursorIndex.CALL);
-                Intent implicit_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + call));
+                Intent implicit_intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + call)); // 전화 인텐트 시작
                 startActivity(implicit_intent);
                 return true;
             case R.id.favorite :                    //즐겨찾기 버튼 누를시 등록, 취소 변경
@@ -123,45 +125,47 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
                                 BunkerContract.Bunkers.TABLE_NAME, BunkerContract.Bunkers.KEY_FAVORITE,
                                 setting, BunkerContract.Bunkers._ID, cursor.getInt(BunkerContract.CursorIndex._ID)
                         );
-                        bunkerDBHelper.WriteDBtoString(sql);
+                        bunkerDBHelper.getWritableDatabase().execSQL(sql);              //변경한 값을 DB에 반영 실패시 catch 로 이동하고 버튼 변경 X
 
                         if(setting == 1){
                             item.setIcon(android.R.drawable.star_big_on);
-                            Toast.makeText(getApplicationContext(), "즐겨찾기목록에 추가하였습니다. ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.favorit_on_toast, Toast.LENGTH_SHORT).show();
                         } else{
                             item.setIcon(android.R.drawable.star_big_off);
-                            Toast.makeText(getApplicationContext(), "즐겨찾기목록에서 삭제되었습니다. ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.favorit_off_toast, Toast.LENGTH_SHORT).show();
                         }
                 } catch (SQLException e){
                     if(setting == 1)
                         setting = 0;
                     else
                         setting = 1;
-                    Toast.makeText(getApplicationContext(), "실패했습니다!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.favorit_fail_toast, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
                 return true;
-            case R.id.detail_loginButton :
+            case R.id.detail_loginButton :          //로그인 버튼 이벤트
                 if(LoginActivity.LoginFlag){
-                    LoginActivity.LoginID = null;
-                    LoginActivity.LoginFlag = false;
-                    item.setTitle(R.string.not_login);
+                    logoutDialog();
                 } else {
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                 }
-            case R.id.delete :
-                deleteDialog();  //삭제 확인 안내창 띄움
+                return true;
+            case R.id.delete :      //삭제 버튼 이벤트
+                if(LoginActivity.LoginFlag) {       //로그인여부확인
+                    deleteDialog();  //삭제 확인 안내창 띄움
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.request_login, Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.edit_activity:
-                if(LoginActivity.LoginFlag) {
+                if(LoginActivity.LoginFlag) {       //로그인 여부 확인
                     Intent goToEdit = new Intent(getApplicationContext(), EditActivity.class);      //editActivity 로 이동
                     goToEdit.putExtra("edit", true);                                    // 수정상태를 의미
-                    goToEdit.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));
+                    goToEdit.putExtra("id", cursor.getInt(BunkerContract.CursorIndex._ID));    //현제 데이터 보여주기 위한 ID
                     startActivity(goToEdit);
-
                 } else {
-                    Toast.makeText(getApplicationContext(), "로그인이 필요한 서비스 입니다", Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), R.string.request_login, Toast.LENGTH_LONG).show();
                 }
                 return true;
             default:
@@ -175,18 +179,18 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         builder.setMessage("삭제하시겠습니까?");
         builder.setPositiveButton("예", new DialogInterface.OnClickListener() {          //예  눌렀을 시
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which) {                //예 버튼 누를시
                 try {
                     bunkerDBHelper.deleteBunkerData(cursor.getInt(BunkerContract.CursorIndex._ID));
-                    Toast.makeText(getApplicationContext(), "삭제하였습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.delete_success, Toast.LENGTH_SHORT).show();
                     finish();
                 } catch (SQLException e){
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "삭제에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.delete_failed, Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {            //아니오 버튼 누를시
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -194,6 +198,27 @@ public class DetailViewActivity extends AppCompatActivity implements OnMapReadyC
         });
         builder.show();
     }
+    public void logoutDialog(){                 //로그아웃 확인 다이얼로그
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout");
+        builder.setMessage("정말 로그아웃 하시겠습니까?");
+        builder.setPositiveButton("예", new DialogInterface.OnClickListener() {          //예  눌렀을 시
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LoginActivity.LoginID = null;
+                LoginActivity.LoginFlag = false;
+                Toast.makeText(getApplicationContext(), R.string.logout_msg, Toast.LENGTH_SHORT).show();
+                loginItem.setTitle(R.string.login);
+            }
+        });
+        builder.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {           //받아온 위도 경도 값으로 지도 위치 이동

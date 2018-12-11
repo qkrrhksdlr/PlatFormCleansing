@@ -39,7 +39,7 @@ public class MainFragment extends Fragment {
         return rootView;
     }
 
-    public void onResume(){
+    public void onResume(){                 //데이터 실시간 반영 위함
         super.onResume();
         if(index>=0){
             viewAllList(SelectFragment.list[index]);

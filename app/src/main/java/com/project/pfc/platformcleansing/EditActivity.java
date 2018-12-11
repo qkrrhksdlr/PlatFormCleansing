@@ -60,21 +60,21 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean editFlag;                   //true면 수정, false면 추가
     private FusedLocationProviderClient fusedLocationProviderClient;  //추가시 현재위치 받아오기 위함
     private Location lastLocation;                                      //위치 저장할 곳
-    private Address geoAddress;
-    private double lastLatitude;
-    private double lastLongitude;
-    private File photoFile;
-    private File resultFile;
-    private String photoFileName = "image.jpg";
-    private boolean pickCapture = false;
-    private Bitmap bitmap;
+    private Address geoAddress;                                 //주소 저장
+    private double lastLatitude;                                //마지막 위도값
+    private double lastLongitude;                               //마지막 경도값
+    private File photoFile;                                     //가져온 사진 파일
+    private File resultFile;                                    //최종 선택된 파일
+    private String photoFileName = "image.jpg";                 //임시 파일 이름
+    private boolean pickCapture = false;                        //이미지를 선택하였는지
+    private Bitmap bitmap;                                      //이미지 압축할 곳
 
-    private final static int REQUEST_IMAGE_PICK = 0;
-    private final static int REQUEST_IMAGE_CAPTURE = 1;
-    private final static int REQUEST_PERMISSIONS_LOCATION = 2;
+    private final static int REQUEST_IMAGE_PICK = 0;            //갤러리
+    private final static int REQUEST_IMAGE_CAPTURE = 1;         //카메라
+    private final static int REQUEST_PERMISSIONS_LOCATION = 2;  //현재 위치
 
 
-    EditText name;
+    EditText name;                  //위젯
     EditText call;
     EditText capacity;
     EditText address;
@@ -94,7 +94,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         editFlag = getIntent().getBooleanExtra("edit", false);                  //추가or수정 모드 확인
 
-        name = (EditText) findViewById(R.id.edit_name);
+        name = (EditText) findViewById(R.id.edit_name);                             //위젯 설정
         call = (EditText) findViewById(R.id.edit_call);
         call.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         capacity = (EditText) findViewById(R.id.edit_capacity);
@@ -130,7 +130,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                     imageButton.setImageURI(Uri.parse("file://" + cursor.getString(BunkerContract.CursorIndex.Image)));
                 }
             }
-        } else {
+        } else {                    //추가모드 일시 타이틀 변경
             setTitle("추가하기");
         }
     }
@@ -193,7 +193,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {       //권한 체크 후 이동
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(grantResults.length > 0 &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED &&
@@ -210,14 +210,14 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public void addMaker(double latitude, double longitude, String name){
+    public void addMaker(double latitude, double longitude, String name){           //마커 추가
         map.clear();                    //마커 지우기
         LatLng latLng = new LatLng(latitude, longitude);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         map.addMarker(new MarkerOptions().alpha(0.8f).title(name).position(latLng));
     }
 
-    public void inputAddress(String string){
+    public void inputAddress(String string){            //검색한 장소를 바탕으로 위도,경도, 주소값 반환
         if(geoAddress != null){
             lastLatitude = geoAddress.getLatitude();
             lastLongitude = geoAddress.getLongitude();
@@ -228,7 +228,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void dispatchPickPictureIntent(){
+    private void dispatchPickPictureIntent(){                       //갤러리에서 이미지 가져오기
         Intent picPicture = new Intent(Intent.ACTION_PICK);
         picPicture.setType("image/*");
         pickCapture = true;
@@ -239,7 +239,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private void dispatchTakePictureIntent(){
+    private void dispatchTakePictureIntent(){                   //카메라로 사진 찍어 가져오기
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         pickCapture = true;
         if(takePictureIntent.resolveActivity(getPackageManager()) != null){
@@ -261,10 +261,10 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             Cursor pathCursor = getContentResolver().query(imgUri, null, null, null, null);
             pathCursor.moveToNext();
             String imageFilePath = pathCursor.getString(pathCursor.getColumnIndex("_data"));
-            photoFile = new File(imageFilePath);
+            photoFile = new File(imageFilePath);                    //받아온 content URI 를 File경로로 변경
             pathCursor.close();
         } else if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){ }
-        if(photoFile != null && photoFile.exists()) {
+        if(photoFile != null && photoFile.exists()) {           //이미지 회전 후 비트맵으로 압축
             Bitmap bit = BitmapFactory.decodeFile(photoFile.toString());
             ExifInterface exifInterface = null;
             try {
@@ -282,7 +282,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             imageButton.setImageBitmap(bitmap);
         }
     }
-    public int exifOrientationToDegrees(int exifOrientation){
+    public int exifOrientationToDegrees(int exifOrientation){               //이미지 회전값 확인
         if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90){
             return 90;
         } else if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_180){
@@ -292,12 +292,12 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         return 0;
     }
-    private Bitmap rotate(Bitmap bitmap, int degree) {
+    private Bitmap rotate(Bitmap bitmap, int degree) {                //이미지 회전 후 비트맵 압축
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
     }
-    public void fileCopy(){
+    public void fileCopy(){                             //앱 전용 외부저장소에 사진 저장
         resultFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), getDate() + ".jpeg");
         if(photoFile != null && photoFile.exists()){
             try{
@@ -311,7 +311,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-    public String getDate(){
+    public String getDate(){                //사진 이름 다 다르게 하기 위해 초단위로 날짜 받아옴
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH) + 1;
@@ -381,26 +381,29 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
                 int capacityText = Integer.parseInt(capacity.getText().toString());
                 String addressText = address.getText().toString();
                 String remarksText = remarks.getText().toString();
-                fileCopy();
+                fileCopy();                 //이미지 파일 복사
                 try{
-                    if(editFlag) {
-                        if(pickCapture){
+                    if(editFlag) {              //수정 모드일 시 업데이트
+                        if(pickCapture){                    //전에 저장되있던 사진파일 삭제
                             File deleteFile = new File(cursor.getString(BunkerContract.CursorIndex.Image));
                             deleteFile.delete();
                         } else {
                             resultFile = new File(cursor.getString(BunkerContract.CursorIndex.Image));
                         }
                         dbHelper.updateBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, resultFile.toString(), cursor.getInt(BunkerContract.CursorIndex._ID));
-                    } else {
-                        dbHelper.insertBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, "Admin", resultFile.toString());
-                        setResult(RESULT_OK);
+                    } else {                    //추가 모드일 시 추가
+                        boolean result = dbHelper.insertBunkerData(nameText, callText, lastLatitude, lastLongitude, addressText, capacityText, remarksText, LoginActivity.LoginID, resultFile.toString());
+                        if(result) {        //데이터 입력 성공
+                            Toast.makeText(getApplicationContext(), R.string.save_success, Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK);
+                        } else          //이미 있는 데이터일 경우
+                            Toast.makeText(getApplicationContext(), R.string.save_exist, Toast.LENGTH_SHORT).show();
                     }
-                    Toast.makeText(getApplicationContext(), "저장 성공", Toast.LENGTH_SHORT).show();
                 } catch (SQLException e){
                     e.printStackTrace();
-                    Toast.makeText(getApplicationContext(), "저장 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.save_failed, Toast.LENGTH_SHORT).show();
                     setResult(RESULT_CANCELED);
-                } finally {
+                } finally {     //끝나면 액티비티 종료
                     finish();
                 }
             }
@@ -409,7 +412,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 setResult(RESULT_CANCELED);
-                if(photoFile != null &&!photoFile.exists())
+                if(photoFile != null &&!photoFile.exists())      //만약 이미지파일을 불러왔었다면 임시파일 삭제
                     photoFile.delete();
                 finish();
             }
@@ -456,7 +459,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {          //landscape 상태 이미지 임시파일 반영
         super.onRestoreInstanceState(savedInstanceState);
         pickCapture = savedInstanceState.getBoolean("pickCapture");
         if(pickCapture){
@@ -467,7 +470,7 @@ public class EditActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(Bundle outState) {                   //landscape 상태 이미지 임시파일 반영
         if(pickCapture) {
             outState.putString("image", photoFile.getAbsolutePath());
         }

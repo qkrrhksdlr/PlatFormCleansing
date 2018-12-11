@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ListActivity extends AppCompatActivity implements SelectFragment.OnTitleSelectedListener{
+public class ListActivity extends AppCompatActivity implements SelectFragment.OnTitleSelectedListener{          //처음 나올 액티비티
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,7 +16,7 @@ public class ListActivity extends AppCompatActivity implements SelectFragment.On
     }
 
     @Override
-    public void onTitleSelected(int i) {
+    public void onTitleSelected(int i) {                        //리스트에서 선택한 아이템 넘겨주기
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             MainFragment mainFragment = new MainFragment();
             mainFragment.setIndex(i);
